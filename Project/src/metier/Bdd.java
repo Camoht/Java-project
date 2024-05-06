@@ -16,8 +16,8 @@ public class Bdd {
 	private List<Movie> movies = new ArrayList<Movie>();
 	private List<Admin> admin = new ArrayList<Admin>();
 	private List<User> users = new ArrayList<User>();
-	private List<Comment> comments= new ArrayList<Comment>();
-	private List<Purchase> purchases= new ArrayList<Purchase>();
+	private List<Comment> comments = new ArrayList<Comment>();
+	private List<Purchase> purchases = new ArrayList<Purchase>();
 	private static String[] movieFields = {
 		    "Theme :",
 		    "Producers :",
@@ -51,9 +51,24 @@ public class Bdd {
 	public void close() {
 		saveBdd();
 	}
-		
-	// Public methods
-	public void addAdmin(Admin admin) {
+
+	// Getters
+	public User getUser(String mail) {
+		for(int i = 0; i < this.users.size(); i++) {
+			/*
+			if(this.users.get(i).getMail() == mail) {
+				return this.users.get(i);
+			}
+			*/
+		}
+		return null;
+	}
+	public List<Movie> getMovies(){
+		return movies;
+	}
+	
+	// Adders
+ 	public void addAdmin(Admin admin) {
 		this.admin.add(admin);
 	}
 	public void addMovie(Movie movie) {
@@ -62,6 +77,101 @@ public class Bdd {
 	public void addUser(User user) {
 		this.users.add(user);
 	}
+	
+	// Destroyers
+	public boolean deleteUser(User user) {
+		return this.users.remove(user);
+	}
+	public boolean deleteMovie(Movie movie) {
+		return this.movies.remove(movie);
+	}
+	
+	// Searchers
+	public List<Movie> searchMovieByTitle(String title){
+		List<Movie> res = new ArrayList<Movie>();
+		
+		for(int i = 0; i < this.movies.size(); i++) {
+			/*if(this.movies.get(i).getTitle().contains(title)) {
+				res.add(this.movies.get(i));
+			}*/
+		}
+		
+		return res;
+	}
+	public List<Movie> searchMovieByTheme(String theme){
+		List<Movie> res = new ArrayList<Movie>();
+		
+		for(int i = 0; i < this.movies.size(); i++) { // For each movie
+			/*for(j = 0; j < this.movies.get(i).getTheme().size(); j++) { // For each theme
+				if(this.movies.get(i).getTheme().get(j).contains(theme)) {
+					res.add(this.movies.get(i));
+				}
+			}*/
+		}
+		
+		return res;
+	}
+	public List<Movie> searchMovieByProducer(String producer){
+		List<Movie> res = new ArrayList<Movie>();
+		
+		for(int i = 0; i < this.movies.size(); i++) { // For each movie
+			/*for(j = 0; j < this.movies.get(i).getProducers().size(); j++) { // For each producer
+				if(this.movies.get(i).getProducers().get(j).contains(theme)) {
+					res.add(this.movies.get(i));
+				}
+			}*/
+		}
+		
+		return res;
+	}
+	public List<Movie> searchMovieByActor(String actor){
+		List<Movie> res = new ArrayList<Movie>();
+		
+		for(int i = 0; i < this.movies.size(); i++) { // For each movie
+			/*for(j = 0; j < this.movies.get(i).getProducers().size(); j++) { // For each producer
+				if(this.movies.get(i).getProducers().get(j).contains(theme)) {
+					res.add(this.movies.get(i));
+				}
+			}*/
+		}
+		
+		return res;
+	}
+	public List<Movie> searchMovieByProductionDate(Date date){
+		List<Movie> res = new ArrayList<Movie>();
+		
+		for(int i = 0; i < this.movies.size(); i++) {
+			/*if(this.movies.get(i).getProductionDate().getYear() == date.getYear()) {
+				res.add(this.movies.get(i));
+			}*/
+		}
+		
+		return res;
+	}
+	public List<Movie> searchMovieByScore(long score){
+		List<Movie> res = new ArrayList<Movie>();
+		
+		for(int i = 0; i < this.movies.size(); i++) {
+			/*if(this.movies.get(i).getScore() >= score) {
+				res.add(this.movies.get(i));
+			}*/
+		}
+		
+		return res;
+	}
+	public List<Movie> searchMovieByPrice(long price){
+		List<Movie> res = new ArrayList<Movie>();
+		
+		for(int i = 0; i < this.movies.size(); i++) {
+			/*if(this.movies.get(i).getPrice() <= price) {
+				res.add(this.movies.get(i));
+			}*/
+		}
+		
+		return res;
+	}
+	
+	// Savers
 	public void saveMovies() {
 		try {
 			
@@ -224,11 +334,17 @@ public class Bdd {
 	    }
 	}
 	public void saveBdd() {
+		// Delete old bdd
+		/*
+		 * 
+		 */
 		saveMovies();
 		savedUsers();
 		saveAdmins();
 		saveComments();
 	}
+
+	// Public methods
 	public int connect(String email, String password) {
 		for (int i = 0; i < this.users.size(); i++) {
 			/*
@@ -264,7 +380,7 @@ public class Bdd {
 		return 0;
 	}
 	
-	// Private methods
+	// Private Readers of saved data
 	private void readSavedMovies() {
 		File bddMoviesDirectory = new File("Bdd/Movies");
 		
