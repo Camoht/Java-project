@@ -10,7 +10,7 @@ public class User {
 	private String username;
 	private List<Movie> history;
 	private List<Comment> comments;
-	private List<Score> scores;
+	private List<Int> scores;
 	
 	// Initialize
  	public User(String email, String password, String secretQuestion, String username) {
@@ -54,10 +54,13 @@ public class User {
 		}
 		return false;
 	}
+	
 	public void addMovieToHistory(Movie movie) {
 		history.add(movie);
 	}
+	
 	public void addScore(Score score) {
 		scores.add(score);
 	}
+
 }
