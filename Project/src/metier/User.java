@@ -10,7 +10,7 @@ public class User {
 	private String username;
 	private List<Movie> history;
 	private List<Comment> comments;
-	private List<Int> scores;
+	private Score score;
 	
 	// Initialize
  	public User(String email, String password, String secretQuestion, String username) {
@@ -59,8 +59,8 @@ public class User {
 		history.add(movie);
 	}
 	
-	public void addScore(Score score) {
-		scores.add(score);
+	public Score score {
+		Score score.value
 	}
 
 }
