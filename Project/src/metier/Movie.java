@@ -4,8 +4,6 @@ import java.util.List;
 
 public class Movie {
 
-	private List<Film> films = new ArrayList<>();
-
 	// Fields
 	private int code;
 	private String theme;
