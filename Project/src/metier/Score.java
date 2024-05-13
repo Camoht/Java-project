@@ -7,14 +7,14 @@ public class Score {
 	private long value;
 	private Date date;
 	private Movie movie;
-	private User author;
+	private User user;
 	
 	// Initialize
-	public Score(long value, Movie movie, User author) {
+	public Score(long value, Movie movie, User user) {
 		super();
 		this.value = value;
 		this.movie = movie;
-		this.author = author;
+		this.user = user;
 		this.date = new Date();
 	}
 	
@@ -28,8 +28,8 @@ public class Score {
 	public Movie getMovie() {
 		return movie;
 	}
-	public User getAuthor() {
-		return author;
+	public User getUser() {
+		return User;
 	}
 	
 	// Setters
@@ -38,4 +38,6 @@ public class Score {
 	}
 
 	// Methods
+
+	public void 
 }
