@@ -2,6 +2,7 @@ package metier;
 import java.util.Date;
 import java.util.List;
 
+
 public class Movie {
 
 	// Fields
@@ -10,11 +11,11 @@ public class Movie {
 	private Date productionDate;
 	private String description;
 	private List<String> acteursPrincipaux;
-	private List<String> poducteurs;
+	private List<String> producteurs;
 	private List<Score> scores;
 	private List<Comment> comments;
 	private double noteMoyenne;
-	private int nombreDeVote;
+	private int nombreDeVotes;
 	
 	// Initialize
 	public Movie(String theme, Date productionDate, String description) {
@@ -32,9 +33,11 @@ public class Movie {
 	public String getTheme() {
 		return theme;
 	}
+	
 	public Date getProductionDate() {
 		return productionDate;
 	}
+	
 	public String getDescription() {
 		return description;
 	}
@@ -42,30 +45,32 @@ public class Movie {
 	public List<Score> getScores() {
 		return scores;
 	}
+	
 	public List<Comment> getComments() {
 		return comments;
 	}
 
 	public int getNombreDeVotes() {
-        	return nombreDeVotes;
-    	}
+        return nombreDeVotes;
+    }
 
 	public double getNoteMoyenne() {
-        	return noteMoyenne;
-    	}
+        return noteMoyenne;
+    }
 
 	public List<String> getActeursPrincipaux() {
-        	return acteursPrincipaux;
-    	}
+        return acteursPrincipaux;
+    }
 
 	public List<String> getProducteurs() {
-        	return producteurs;
-    	}
+        return producteurs;
+    }
 
+	
 	// Setters
-    	public void setCode(int code) {
-        	this.code = code;
-    	}
+    public void setCode(int code) {
+       	this.code = code;
+    }
 	
 	public void setTheme(String theme) {
 		this.theme = theme;
@@ -80,44 +85,41 @@ public class Movie {
 	}
 
    	public void setNombreDeVotes(int nombreDeVotes) {
-        	this.nombreDeVotes = nombreDeVotes;
-    	}
+       	this.nombreDeVotes = nombreDeVotes;
+    }
 
 	public void setNoteMoyenne(double noteMoyenne) {
-        	this.noteMoyenne = noteMoyenne;
-    	}
+		this.noteMoyenne = noteMoyenne;
+    }
 
 	public void setActeursPrincipaux(List<String> acteursPrincipaux) {
-        	this.acteursPrincipaux = acteursPrincipaux;
-    	}
+        this.acteursPrincipaux = acteursPrincipaux;
+    }
 
 	public void setProducteurs(List<String> producteurs) {
-        	this.producteurs = producteurs;
-    	}
+        this.producteurs = producteurs;
+    }
 	
 	// Methods
 	public void addComment(Comment comment) {
 		comments.add(comment);
 	}
+	
 	public void addScore(Score score) {
 		scores.add(score);
 	}
-
-    	public void ajouterFilm(Film film) {
-        	films.add(film);
-    	}
-
-    	public void supprimerFilm(int code) {
-        	films.removeIf(film -> film.getCode() == code);
-    	}
-
-
-    	public List<Film> filtrerFilmsParTheme(String theme) {
-        	return films.stream()
-                    	.filter(film -> film.getTheme().equals(theme))
-                    	.collect(Collectors.toList());
-    	}
-
-
 	
+	public void modifierFilm(User user, String nouveauTheme, Date nouvelleProductionDate, String nouvelleDescription, List<String> nouveauxActeurs, List<String> nouveauxProducteurs) {
+			if (user.getIsAdmin()) {
+				this.theme = nouveauTheme;
+				this.productionDate = nouvelleProductionDate;
+				this.description = nouvelleDescription;
+				this.acteursPrincipaux = nouveauxActeurs;
+				this.producteurs = nouveauxProducteurs;
+				System.out.println("Film modifié par l'administrateur.");
+			} else {
+				System.out.println("Accès refusé. Seuls les administrateurs peuvent modifier les films.");
+				}
+
 }
+	}
