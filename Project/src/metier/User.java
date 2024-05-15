@@ -27,11 +27,14 @@ public class User {
         this.historiqueAchats = historiqueAchats;
         this.panier = panier;
         this.isAdmin = isAdmin;
-        if (comment.isEmpty()) {
-        	comment=new ArrayList<>();
+        if (comment == null) {
+            this.comment = new ArrayList<>();
+        } else if (comment.isEmpty()) {
+            this.comment = new ArrayList<>();
         } else {
-        	this.comment=comment;
+            this.comment = comment;
         }
+
     }
 
     public int getCode() {
