@@ -1,22 +1,26 @@
 package metier;
+import java.util.Date;
+import java.util.List;
 
-public class Achat {
-    private Film film;
+
+public class Purchase {
+	private int code;
+    private List<Movie> movie;
     private Date dateAchat;
     private double montant;
 
-    public Achat(Film film, Date dateAchat, double montant) {
-        this.film = film;
+    public Purchase(List<Movie> movie, Date dateAchat, double montant) {
+        this.movie = movie;
         this.dateAchat = dateAchat;
         this.montant = montant;
     }
 
-    public Film getFilm() {
-        return film;
+    public List<Movie> getMovie() {
+        return movie;
     }
 
-    public void setFilm(Film film) {
-        this.film = film;
+    public void setMovie(List<Movie> movie) {
+        this.movie = movie;
     }
 
     public Date getDateAchat() {
@@ -34,3 +38,5 @@ public class Achat {
     public void setMontant(double montant) {
         this.montant = montant;
     }
+    
+}
