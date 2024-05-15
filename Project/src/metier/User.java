@@ -2,65 +2,118 @@ package metier;
 import java.util.List;
 
 public class User {
-	
-	// Fields
-	private String email; // Id
-	private String password;
-	private String secretQuestion;
-	private String username;
-	private List<Movie> history;
-	private List<Comment> comments;
-	private Score score;
-	
-	// Initialize
- 	public User(String email, String password, String secretQuestion, String username) {
-		super();
-		this.email = email;
-		this.password = password;
-		this.secretQuestion = secretQuestion;
-		this.username = username;
-	}
+	private int code;
+    private String email;
+    private String motDePasse;
+    private String nom;
+    private String prenom;
+    private String adresse;
+    private String phraseSecrete;
+    private List<Purchase> historiqueAchats;
+    private List<Movie> panier;
+    private boolean isAdmin;
+    private List<Comment> comment;
+    
+    
+    public User(int code, List<Comment> comment, boolean isAdmin, List<Movie> panier, List<Purchase> historiqueAchats, String email, String motDePasse, String nom, String prenom, String adresse, String phraseSecrete) {
+        this.code=code;
+    	this.email = email;
+        this.motDePasse = motDePasse;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.adresse = adresse;
+        this.phraseSecrete = phraseSecrete;
+        this.historiqueAchats = historiqueAchats;
+        this.panier = panier;
+        this.isAdmin = isAdmin;
+        this.comment=comment;
+    }
 
-	// Getters
-	public String getEmail() {
-		return email;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public List<Movie> getHistory() {
-		return history;
-	}
-	public List<Comment> getComments() {
-		return comments;
-	}
-	public List<Score> getScores() {
-		return scores;
-	}
-	
-	// Setters
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public int getCode() {
+    	return code;
+    }
+    
+    public void setCode(int code) {
+    	this.code=code;
+    }
+    
+    
+    public String getEmail() {
+        return email;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
-	// Methods
-	public boolean connect(String email, String password) {
-		if(this.password.equals(password) && this.email.equals(email)){
-			return true;
-		}
-		return false;
-	}
-	
-	public void addMovieToHistory(Movie movie) {
-		history.add(movie);
-	}
-	
-	public Score score {
-		Score score.value
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-}
+    public String getMotDePasse() {
+        return motDePasse;
+    }
+
+    public void setMotDePasse(String motDePasse) {
+        this.motDePasse = motDePasse;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public String getPhraseSecrete() {
+        return phraseSecrete;
+    }
+
+    public void setPhraseSecrete(String phraseSecrete) {
+        this.phraseSecrete = phraseSecrete;
+    }
+
+    public List<Purchase> getHistoriqueAchats() {
+        return historiqueAchats;
+    }
+
+    public void setHistoriqueAchats(List<Purchase> historiqueAchats) {
+    	this.historiqueAchats = historiqueAchats;
+    }
+    
+    
+    public List<Movie> getPanier() {
+        return panier;
+    }
+    
+    public void setPanier(List<Movie> panier) {
+    	this.panier=panier;
+    }
+    
+    
+    
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+    
+
+    
+    // methods
+   
