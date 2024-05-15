@@ -4,19 +4,21 @@ import java.util.Date;
 public class Score {
 
 	// Fields
+	private int code;
 	private long value;
 	private Date date;
 	private Movie movie;
 	private User user;
 	
 	// Initialize
-	public Score(long value, Movie movie, User user) {
-		super();
-		this.value = value;
-		this.movie = movie;
-		this.user = user;
-		this.date = new Date();
-	}
+    public Score(int code, long value, Date date, Movie movie, User user) {
+        this.code = code;
+        this.value = value;
+        this.date = date;
+        this.movie = movie;
+        this.user = user;
+    }
+
 	
 	// Getters
 	public long getValue() {
@@ -29,7 +31,7 @@ public class Score {
 		return movie;
 	}
 	public User getUser() {
-		return User;
+		return user;
 	}
 	
 	// Setters
@@ -39,5 +41,5 @@ public class Score {
 
 	// Methods
 
-	public void 
+	//public void 
 }
