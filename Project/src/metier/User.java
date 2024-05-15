@@ -1,5 +1,6 @@
 package metier;
 import java.util.List;
+import java.util.ArrayList;
 
 public class User {
 	private int code;
@@ -26,7 +27,11 @@ public class User {
         this.historiqueAchats = historiqueAchats;
         this.panier = panier;
         this.isAdmin = isAdmin;
-        this.comment=comment;
+        if (comment.isEmpty()) {
+        	comment=new ArrayList<>();
+        } else {
+        	this.comment=comment;
+        }
     }
 
     public int getCode() {
@@ -122,4 +127,5 @@ public class User {
     }
     
     // methods
+   
 }
