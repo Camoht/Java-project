@@ -120,6 +120,35 @@ public class Movie {
 			} else {
 				System.out.println("Accès refusé. Seuls les administrateurs peuvent modifier les films.");
 				}
+	}
+			
+    public void addComment(int code, String text, Date publicationDate, boolean activated, User author) {
+        Comment comment = new Comment(code, text, publicationDate, activated, this, author);
+        comments.add(comment);
+    }
+    
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
+    }
+    
+    
+    
+    public void addScore(int code, long value, Date date, User user) {
+        Score score = new Score(code, value, date, this, user);
+        scores.add(score);
+        updateAverageRating(); // Met à jour la note moyenne après l'ajout d'un nouveau score
+    }
 
-}
+    // Méthode pour mettre à jour la note moyenne du film
+    public void updateAverageRating() {
+        double totalRating = 0;
+        for (Score score : scores) {
+            totalRating += score.getValue();
+        }
+        noteMoyenne = totalRating / scores.size();
+    }
+    
+    
+    
+    
 	}
