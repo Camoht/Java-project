@@ -113,7 +113,13 @@ public class User {
         this.isAdmin = isAdmin;
     }
     
-
+    public List<Comment> getComment() {
+    	return comment;
+    }
+    
+    public void setComment(List<Comment> comment) {
+    	this.comment=comment;
+    }
     
     // methods
-   
+}
