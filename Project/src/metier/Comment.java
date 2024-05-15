@@ -12,13 +12,13 @@ public class Comment {
 	private User author;
 	
 	// Initialize
-	public Comment(String text, Movie movie, User author) {
-		super();
-		this.text = text;
-		this.movie = movie;
-		this.author = author;
-		this.activated = true;
-		this.publicationDate = new Date();
+	public Comment(int code, String text, Date publicationDate, boolean activated, Movie movie, User author) {
+	    this.code = code;
+	    this.text = text;
+	    this.publicationDate = publicationDate;
+	    this.activated = activated;
+	    this.movie = movie;
+	    this.author = author;
 	}
 	
 	// Getters
@@ -54,15 +54,18 @@ public class Comment {
 		this.code=code;
 	}
  
+	public void setAuthor(User author) {
+		this.author = author;
+	}
 	// Methods
 	
 	public void disableComment(Movie movie, User user, Comment comment) {
 		if (user.getIsAdmin()) {
-			
-			System.out.println("Film modifié par l'administrateur.");
-		} else {
-			System.out.println("Accès refusé. Seuls les administrateurs peuvent modifier les films.");
+			if (this.activated==false) {
+			} else {
+				this.activated=false;
 }
 	}
 	
+	}
 }
