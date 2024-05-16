@@ -16,7 +16,10 @@ import comparators.commentComparatorByPositivity;
 import comparators.movieComparatorByDate;
 import comparators.movieMostAppreciated;
 import metier.Admin;
+import metier.Comment;
 import metier.Movie;
+import metier.Purchase;
+import metier.Score;
 import metier.User;
 
 public class Movies {
@@ -24,19 +27,29 @@ public class Movies {
 	// Fields
 	private List<Movie> movies = new ArrayList<Movie>();
 	private static String[] movieFields = {
+			"Code :",
 		    "Theme :",
 		    "Producers :",
 		    "Main Actors :",
-			"Production Year :",
-		    "Rating :",
+			"Production Date :",
+		    "Score :",
+			"Mean Score :",
+			"Comment :",
 		    "Description :",
 		    "Price :"
 	};
 
-
 	// Getters
 	public List<Movie> getMovies(){
 		return movies;
+	}
+	public Movie getMovie(int code) {
+		for (int i = 0; i < this.movies.size(); i++) {
+			if (this.movies.get(i).getCode() == code) {
+				return this.movies.get(i);
+			}
+		}
+		return null;
 	}
 	public List<Movie> getMoviesOfTheme(String theme){
 		List<Movie> res = new ArrayList<Movie>();
@@ -53,6 +66,9 @@ public class Movies {
 	// Adder
 	public void addMovie(Movie movie) {
 		this.movies.add(movie);
+	}
+	public void addMovie(String theme, Date productionDate, String description, List<String> acteursPrincipaux, List<String> producteurs) {
+		this.movies.add(new Movie(this.movies.size() + 1, theme, productionDate, description, acteursPrincipaux, producteurs, null, null, 0, 0));
 	}
 	
 	// Sorters
@@ -190,30 +206,37 @@ public class Movies {
 		    
 			// Save Movies :
 			for (int i = 0; i < this.movies.size(); i++) {
-				
-				// Write data in the file
-			    writer = new BufferedWriter(new FileWriter("Bdd/Movies/" /*+  movies.get(i).getCode()*/));
 			    
-			    /*
+				// Write data in the file
+			    writer = new BufferedWriter(new FileWriter("Bdd/Movies/" +  movies.get(i).getCode() + ".txt"));
+			    
 			    writer.write(movieFields[0] + "\n");
-			    writer.write(movies.get(i).getTheme() + "\n");
+			    writer.write(movies.get(i).getCode() + "\n");
 			    writer.write(movieFields[1] + "\n");
-			    for (int j = 0; j < movies.get(i).getProducers().length; j++){
-			    	writer.write(movies.get(i).getProducers().get(j) + "\n");
-			    }
+			    writer.write(movies.get(i).getTheme() + "\n");
 			    writer.write(movieFields[2] + "\n");
-			    for (int j = 0; j < movies.get(i).getMainActors().length; j++){
-			    	writer.write(movies.get(i).getMainActors().get(j) + "\n");
+			    for (int j = 0; j < movies.get(i).getProducteurs().size(); j++){
+			    	writer.write(movies.get(i).getProducteurs().get(j) + "\n");
 			    }
 			    writer.write(movieFields[3] + "\n");
-			    writer.write(movies.get(i).getProductionYear() + "\n");
+			    for (int j = 0; j < movies.get(i).getActeursPrincipaux().size(); j++){
+			    	writer.write(movies.get(i).getActeursPrincipaux().get(j) + "\n");
+			    }
 			    writer.write(movieFields[4] + "\n");
-			    writer.write(movies.get(i).getRating() + "\n");
+			    writer.write(movies.get(i).getProductionDate().getTime() + "\n");
 			    writer.write(movieFields[5] + "\n");
-			    writer.write(movies.get(i).getDescription() + "\n");
+			    for (int j = 0; j < movies.get(i).getScores().size(); j++){
+				    writer.write(movies.get(i).getScores().get(j) + "\n");
+			    }
 			    writer.write(movieFields[6] + "\n");
-			    writer.write(movies.get(i).getPrice() + "\n");
-				*/
+			    writer.write(movies.get(i).getNoteMoyenne() + "\n");
+			    writer.write(movieFields[7] + "\n");
+			    for (int j = 0; j < movies.get(i).getComments().size(); j++){
+				    writer.write(movies.get(i).getComments().get(j) + "\n");
+			    }
+			    writer.write(movieFields[8] + "\n");
+			    writer.write(movies.get(i).getDescription() + "\n");
+			    // Price
 			    
 			    writer.close();
 			}
@@ -222,7 +245,7 @@ public class Movies {
 	        System.out.println("An error occurred : We could not save your modifications about movies");
 	    }	
 	}
-	
+	@SuppressWarnings("deprecation")
 	void readSavedMovies() {
 		File bddMoviesDirectory = new File("Bdd/Movies");
 		
@@ -237,17 +260,20 @@ public class Movies {
 		for (int i = 0; i < listOfFile.length; i++) { // For each existing file
 			
 			// Create needed variables to add a movie
+			int code = -1;
 			String theme = "";
 			List<String> producers = new ArrayList<String>();
 			List<String> mainActors = new ArrayList<String>();
-			int productionYear = 0;
-			int rating = 0;
+			Date productionDate = null;
+			double meanScore = 0;
 			String description = "";
-			String price = "";
+			String temp = "";
+			// Price
 			
 			try {
 				
 				// Create needed variables
+				@SuppressWarnings("resource")
 				BufferedReader reader = new BufferedReader(new FileReader(listOfFile[i])); // to read the current file
 			    int idField = -1; // Correspond to an id of the actual saving field
 			    boolean isTitle; // true : the read line is a title corresponding to an idField; false : the read line is a field content
@@ -268,43 +294,42 @@ public class Movies {
 			    	if(! isTitle) { // The line is a field content
 			    		switch(idField) {
 			    		case 0 :
-			    			theme = lineInFile.trim();
+			    			code = Integer.parseInt(lineInFile.trim());
 			    			break;
 			    		case 1 :
-			    			producers.add(lineInFile.trim());
+			    			theme = lineInFile.trim();
 			    			break;
 			    		case 2 :
-			    			mainActors.add(lineInFile.trim());
+			    			producers.add(lineInFile.trim());
 			    			break;
 			    		case 3 :
-			    			if(lineInFile.trim().length() == 4) {
-			    				productionYear = (int) ((lineInFile.trim().charAt(0) - '0') * 1000 + (lineInFile.trim().charAt(1) - '0') * 100 + (lineInFile.trim().charAt(2) - '0') * 10 + (lineInFile.trim().charAt(3) - '0'));
-			    			}
+			    			mainActors.add(lineInFile.trim());
 			    			break;
 			    		case 4 :
-			    			if(lineInFile.trim().length() == 1) {
-			    				rating = (int) ((lineInFile.trim().charAt(0) - '0') * 1000 + (lineInFile.trim().charAt(1) - '0') * 100 + (lineInFile.trim().charAt(2) - '0') * 10 + (lineInFile.trim().charAt(3) - '0'));
-			    			}
-			    			break;
-			    		case 5 :
-			    			if(lineInFile.trim().length() == 1) {
-			    				description += lineInFile.trim() + "\n";
-			    			}
+			    			productionDate = new Date(Long.parseLong(lineInFile.trim()));
 			    			break;
 			    		case 6 :
-			    			if(lineInFile.trim().length() == 1) {
-			    				price = lineInFile.trim();
+			    			temp = lineInFile.trim();
+			    			if(temp.split("\\.").length >= 2) {
+				    			meanScore = Integer.parseInt(temp.split("\\.")[0]) + 0.01 * Integer.parseInt(temp.split("\\.")[1]);
+			    			} else {
+				    			meanScore = Integer.parseInt(temp);
 			    			}
 			    			break;
+			    		case 8 :
+			    			description = lineInFile.trim();
+			    			break;
+			    		// Price
+		    			default :
+		    				break;
 			    		}
 			    	}
 
 			    	lineInFile = reader.readLine(); // Read the next line of the current file
 			    }
 
-			    reader.close();
-			    
-			    // addMovie(new Movie(listOfFile[i], theme, producers, mainActors, productionYear, rating, description, price));
+			    Movie movie = new Movie(code, theme, productionDate, description, mainActors, producers, null, null, meanScore, 0);
+			    addMovie(movie);
 			
 			} catch (IOException e) { // Display a message if an error has occurred while reading in the files
 		        System.out.println("An error occurred : We could not get saved informations");

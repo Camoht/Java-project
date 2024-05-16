@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import comparators.commentComparatorByDate;
@@ -15,17 +16,20 @@ import comparators.commentComparatorByPositivity;
 import comparators.movieComparatorByDate;
 import comparators.movieMostAppreciated;
 import metier.Comment;
+import metier.Movie;
+import metier.User;
 
 public class Comments {
 
 	// Fields
 	private List<Comment> comments = new ArrayList<Comment>();
 	private static String[] commentFields = {
-		    "Author :",
-		    "Movie :",
-		    "Description :",
-		    "Positive :",
-		    "Active :"
+		    "Code :",
+		    "Text :",
+		    "Publcation Date :",
+		    "Activated :",
+		    "Movie Code :",
+		    "Author Code :"
 	};
 	
 	// Sorters
@@ -55,20 +59,19 @@ public class Comments {
 			for (int i = 0; i < this.comments.size(); i++) {
 				
 				// Write data in the file
-			    writer = new BufferedWriter(new FileWriter("Bdd/Comments/" /*+  comments.get(i).getId()*/));
-			    
-			    /*
+			    writer = new BufferedWriter(new FileWriter("Bdd/Comments/" +  comments.get(i).getCode() + ".txt"));
 			    writer.write(commentFields[0] + "\n");
-			    writer.write(comments.get(i).getAuthor() + "\n");
+			    writer.write(comments.get(i).getCode() + "\n");
 			    writer.write(commentFields[1] + "\n");
-			    writer.write(comments.get(i).getMovie() + "\n");
+			    writer.write(comments.get(i).getText() + "\n");
 			    writer.write(commentFields[2] + "\n");
-			    writer.write(comments.get(i).getDescription() + "\n");
+			    writer.write(comments.get(i).getPublicationDate().getTime() + "\n");
 			    writer.write(commentFields[3] + "\n");
-			    writer.write(comments.get(i).getPositive() + "\n");
+			    //writer.write(comments.get(i).getActivated() + "\n");
 			    writer.write(commentFields[4] + "\n");
-			    writer.write(comments.get(i).getActive() + "\n");
-				*/
+			    writer.write(comments.get(i).getMovie().getCode() + "\n");
+			    writer.write(commentFields[5] + "\n");
+			    writer.write(comments.get(i).getAuthor().getCode() + "\n");
 			    
 			    writer.close();
 			}
@@ -77,7 +80,7 @@ public class Comments {
 	        System.out.println("An error occurred : We could not save your modifications");
 	    }
 	}
-
+	@SuppressWarnings("deprecation")
 	void readSavedComments() {
 		File bddCommentsDirectory = new File("Bdd/Comments");
 		
@@ -91,15 +94,17 @@ public class Comments {
 		for (int i = 0; i < listOfFile.length; i++) { // For each existing file
 			
 			// Create needed variables to add a user
-			String author = "";
-			String movie = "";
-			String description = "";
-			boolean positive = false;
-			boolean active = false;
+			int code = 0;
+			String texte = "";
+			Date publicationDate = new Date();
+			boolean activated = false;
+			int movieCode = 0;
+			int authorCode = 0;
 			
 			try {
 				
 				// Create needed variables
+				@SuppressWarnings("resource")
 				BufferedReader reader = new BufferedReader(new FileReader(listOfFile[i])); // to read the current file
 			    int idField = -1; // Correspond to an id of the actual saving field
 			    boolean isTitle; // true : the read line is a title corresponding to an idField; false : the read line is a field content
@@ -120,32 +125,54 @@ public class Comments {
 			    	if(! isTitle) { // The line is a field content
 			    		switch(idField) {
 			    		case 0 :
-			    			author = lineInFile.trim();
+			    			code = Integer.parseInt(lineInFile.trim());
 			    			break;
 			    		case 1 :
-			    			movie = lineInFile.trim();
+			    			texte = lineInFile.trim();
 			    			break;
 			    		case 2 :
-			    			description += lineInFile.trim();
+			    			publicationDate = new Date(lineInFile.trim());
 			    			break;
 			    		case 3 :
-			    			positive = lineInFile.trim().equals("true");
+			    			activated = lineInFile.trim().equals("true");
 			    			break;
 			    		case 4 :
-			    			active = lineInFile.trim().equals("true");
+			    			movieCode = Integer.parseInt(lineInFile.trim());
+			    			break;
+			    		case 5 :
+			    			authorCode = Integer.parseInt(lineInFile.trim());
 			    			break;
 			    		}
 			    	}
 
 			    	lineInFile = reader.readLine(); // Read the next line of the current file
 			    }
-
-			    reader.close();
 			    
 			    // addAdmin(new User(listOfFile[i], password, surname, name, subscriber));
 			} catch (IOException e) { // Display a message if an error has occurred while reading in the files
 		        System.out.println("An error occurred : We could not get saved informations");
 		    }
 		}
+	}
+
+	// Getter
+ 	public List<Comment> getComments(){
+ 		return comments;
+ 	}
+	public Comment getComment(int code) {
+		for (int i = 0; i < this.comments.size(); i++) {
+			if (this.comments.get(i).getCode() == code) {
+				return this.comments.get(i);
+			}
+		}
+		return null;
+	}
+
+	// Adders
+	public void addComment(Comment comment) {
+		this.comments.add(comment);
+	}	
+	public void addComment(String text, Movie movie, User author) {
+		this.comments.add(new Comment(this.comments.size() + 1, text, new Date(System.currentTimeMillis()), true, movie, author));
 	}
 }
