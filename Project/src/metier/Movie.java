@@ -7,6 +7,7 @@ public class Movie {
 
 	// Fields
 	private int code;
+	private String title;
 	private String theme;
 	private Date productionDate;
 	private String description;
@@ -16,19 +17,39 @@ public class Movie {
 	private List<Comment> comments;
 	private double noteMoyenne;
 	private int nombreDeVotes;
+	private double price;
 	
 	// Initialize
-	public Movie(String theme, Date productionDate, String description) {
+	public Movie(String title,int code, String theme, Date productionDate, String description, List<String> acteursPrincipaux,
+			List<String> producteurs, List<Score> scores, List<Comment> comments, double noteMoyenne, int nombreDeVotes,
+			double price) {
 		super();
+		this.title=title;
+		this.code = code;
 		this.theme = theme;
 		this.productionDate = productionDate;
 		this.description = description;
+		this.acteursPrincipaux = acteursPrincipaux;
+		this.producteurs = producteurs;
+		this.scores = scores;
+		this.comments = comments;
+		this.noteMoyenne = noteMoyenne;
+		this.nombreDeVotes = nombreDeVotes;
+		this.price = price;
+	}
+
+	// Getters
+	public String getTitle() {
+		return title;
 	}
 	
-	// Getters
+	public double getPrice() {
+		return price;
+	}
+	
 	public int getCode() {
-        	return code;
-    	}
+        return code;
+    }
 
 	public String getTheme() {
 		return theme;
@@ -68,6 +89,14 @@ public class Movie {
 
 	
 	// Setters
+	public void setTitle(String title) {
+		this.title=title;
+	}
+	
+	public void setPrice(double price) {
+		this.price=price;
+	}
+	
     public void setCode(int code) {
        	this.code = code;
     }

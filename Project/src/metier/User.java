@@ -24,8 +24,20 @@ public class User {
         this.prenom = prenom;
         this.adresse = adresse;
         this.phraseSecrete = phraseSecrete;
-        this.historiqueAchats = historiqueAchats;
-        this.panier = panier;
+        if (historiqueAchats == null) {
+            this.historiqueAchats = new ArrayList<>();
+        } else if (historiqueAchats.isEmpty()) {
+            this.historiqueAchats = new ArrayList<>();
+        } else {
+            this.historiqueAchats = historiqueAchats;
+        }
+        if (panier == null) {
+            this.panier = new ArrayList<>();
+        } else if (comment.isEmpty()) {
+            this.panier = new ArrayList<>();
+        } else {
+            this.panier = panier;
+        }
         this.isAdmin = isAdmin;
         if (comment == null) {
             this.comment = new ArrayList<>();

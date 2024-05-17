@@ -62,10 +62,14 @@ public class Comment {
 	public void disableComment(Movie movie, User user, Comment comment) {
 		if (user.getIsAdmin()) {
 			if (this.activated==false) {
+				System.out.println("Commentaires déjà désactivés pour ce film.");
 			} else {
 				this.activated=false;
+				System.out.println("Commentaires désactivé pour ce film."); }
+		} else {
+			System.out.println("Accès refusé. Seuls les administrateurs peuvent désactiver les commentaires.");
 }
 	}
 	
-	}
+
 }

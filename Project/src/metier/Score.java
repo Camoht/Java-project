@@ -21,6 +21,10 @@ public class Score {
 
 	
 	// Getters
+    public int getCode() {
+    	return code;
+    }
+    
 	public long getValue() {
 		return value;
 	}
@@ -38,6 +42,10 @@ public class Score {
 	public void setValue(long value) {
 		this.value = value;
 	}
+	
+    public void setCode(int code) {
+    	this.code=code;
+    }
 
 	// Methods
 

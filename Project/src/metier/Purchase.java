@@ -9,12 +9,21 @@ public class Purchase {
     private Date dateAchat;
     private double montant;
 
-    public Purchase(List<Movie> movie, Date dateAchat, double montant) {
-        this.movie = movie;
+    public Purchase(int code,List<Movie> movie, Date dateAchat, double montant) {
+        this.code=code;
+    	this.movie = movie;
         this.dateAchat = dateAchat;
         this.montant = montant;
     }
 
+    public int getCode() {
+    	return code;
+    }
+    
+    public void setCode(int code) {
+    	this.code=code;
+    }
+    
     public List<Movie> getMovie() {
         return movie;
     }
