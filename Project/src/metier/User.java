@@ -1,9 +1,10 @@
 package metier;
+
 import java.util.List;
 import java.util.ArrayList;
 
 public class User {
-	private int code;
+    private int code;
     private String email;
     private String motDePasse;
     private String nom;
@@ -13,51 +14,43 @@ public class User {
     private List<Purchase> historiqueAchats;
     private List<Movie> panier;
     private boolean isAdmin;
-    private List<Comment> comment;
-    
-    
-    public User(int code, List<Comment> comment, boolean isAdmin, List<Movie> panier, List<Purchase> historiqueAchats, String email, String motDePasse, String nom, String prenom, String adresse, String phraseSecrete) {
-        this.code=code;
-    	this.email = email;
+    private List<Comment> comments;
+    private List<Score> scores;
+    private boolean isSubscribe;
+
+    // Constructor
+    public User(boolean isSubscribe,int code, List<Comment> comments, boolean isAdmin, List<Movie> panier, List<Purchase> historiqueAchats,
+                String email, String motDePasse, String nom, String prenom, String adresse, String phraseSecrete) {
+        this.code = code;
+        this.email = email;
         this.motDePasse = motDePasse;
         this.nom = nom;
         this.prenom = prenom;
         this.adresse = adresse;
         this.phraseSecrete = phraseSecrete;
-        if (historiqueAchats == null) {
-            this.historiqueAchats = new ArrayList<>();
-        } else if (historiqueAchats.isEmpty()) {
-            this.historiqueAchats = new ArrayList<>();
-        } else {
-            this.historiqueAchats = historiqueAchats;
-        }
-        if (panier == null) {
-            this.panier = new ArrayList<>();
-        } else if (comment.isEmpty()) {
-            this.panier = new ArrayList<>();
-        } else {
-            this.panier = panier;
-        }
+        this.historiqueAchats = historiqueAchats != null ? historiqueAchats : new ArrayList<>();
+        this.panier = panier != null ? panier : new ArrayList<>();
         this.isAdmin = isAdmin;
-        if (comment == null) {
-            this.comment = new ArrayList<>();
-        } else if (comment.isEmpty()) {
-            this.comment = new ArrayList<>();
-        } else {
-            this.comment = comment;
-        }
-
+        this.comments = comments != null ? comments : new ArrayList<>();
     }
 
+    // Getters and setters
+    public boolean getIsSubscribe() {
+    	return isSubscribe;
+    }
+    
+    public void setIsSubscribe(boolean isSubscribe) {
+    	this.isSubscribe=isSubscribe;
+    }
+    
     public int getCode() {
-    	return code;
+        return code;
     }
-    
+
     public void setCode(int code) {
-    	this.code=code;
+        this.code = code;
     }
-    
-    
+
     public String getEmail() {
         return email;
     }
@@ -111,20 +104,17 @@ public class User {
     }
 
     public void setHistoriqueAchats(List<Purchase> historiqueAchats) {
-    	this.historiqueAchats = historiqueAchats;
+        this.historiqueAchats = historiqueAchats;
     }
-    
-    
+
     public List<Movie> getPanier() {
         return panier;
     }
-    
+
     public void setPanier(List<Movie> panier) {
-    	this.panier=panier;
+        this.panier = panier;
     }
-    
-    
-    
+
     public boolean getIsAdmin() {
         return isAdmin;
     }
@@ -132,15 +122,40 @@ public class User {
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
-    
+
     public List<Comment> getComment() {
-    	return comment;
+        return comments;
     }
-    
+
     public void setComment(List<Comment> comment) {
-    	this.comment=comment;
+        this.comments = comment;
+    }
+
+    public void addMovieToPanier(Movie movie) {
+        if (movie != null) {
+            panier.add(movie);
+        } else {
+        }
+    }
+
+    public void removeMovieFromPanier(Movie movie) {
+        if (movie != null && panier.contains(movie)) {
+            panier.remove(movie);
+        } else {
+        }
+    
+    }
+    public void addPurchaseToHistorique(Purchase purchase) {
+        historiqueAchats.add(purchase);
     }
     
-    // methods
-   
+    // nécessaire car on utilise cette méthode dans movie
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
+
+    // Méthode pour ajouter un score à la liste de scores de l'utilisateur
+    public void addScore(Score score) {
+    	scores.add(score);
+    }
 }
