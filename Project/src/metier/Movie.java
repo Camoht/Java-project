@@ -6,6 +6,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Movie {
 
+    private static double reductionRate = 0.9;
+
     // Fields
     private int code;
     private String title;
@@ -189,7 +191,7 @@ public class Movie {
     public double calculateReducedPrice(User user) {
         if (user.getIsSubscribe()) {
             // Si l'utilisateur est abonné, appliquer une réduction de 10% sur le prix du film
-            return price * 0.9;
+            return reductionRate * 0.9;
         } else {
             // Si l'utilisateur n'est pas abonné, retourner le prix du film sans réduction
             return price;
