@@ -11,16 +11,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import comparators.commentComparatorByDate;
-import comparators.commentComparatorByPositivity;
 import comparators.movieComparatorByDate;
 import comparators.movieMostAppreciated;
-import metier.Admin;
-import metier.Comment;
 import metier.Movie;
-import metier.Purchase;
-import metier.Score;
-import metier.User;
 
 public class Movies {
 
@@ -32,13 +25,19 @@ public class Movies {
 		    "Producers :",
 		    "Main Actors :",
 			"Production Date :",
-		    "Score :",
-			"Mean Score :",
-			"Comment :",
 		    "Description :",
+		    "Title :",
 		    "Price :"
 	};
 
+	// Initialize
+	public Movies() {
+		this.movies = new ArrayList<Movie>();
+	}
+	public Movies(List<Movie> movies) {
+		this.movies = movies;
+	}
+	
 	// Getters
 	public List<Movie> getMovies(){
 		return movies;
@@ -67,8 +66,23 @@ public class Movies {
 	public void addMovie(Movie movie) {
 		this.movies.add(movie);
 	}
-	public void addMovie(String theme, Date productionDate, String description, List<String> acteursPrincipaux, List<String> producteurs) {
-		this.movies.add(new Movie(this.movies.size() + 1, theme, productionDate, description, acteursPrincipaux, producteurs, null, null, 0, 0));
+	public void addMovie(String title, String theme, Date productionDate, String description, List<String> acteursPrincipaux, List<String> producteurs, double price) {
+		this.movies.add(new Movie(title, this.movies.size() + 1, theme, productionDate, description, acteursPrincipaux, producteurs, null, null, price));
+	}
+	public boolean deleteMovie(Movie movie, Scores scores, Comments comments) {
+		// Delete his scores
+		if(scores != null) {
+			for(int i = 0; i < movie.getScores().size(); i++) {
+				scores.deleteScore(movie.getScores().get(i).getCode());
+			}
+		}
+		// Delete his comments
+		if(comments != null) {
+			for(int i = 0; i < movie.getComments().size(); i++) {
+				comments.deleteComment(movie.getComments().get(i).getCode());
+			}
+		}
+		return this.movies.remove(movie);
 	}
 	
 	// Sorters
@@ -82,30 +96,39 @@ public class Movies {
 	public int getMediumNumberOfCommentPerMovie() {
 		int nbComment = 0;
 		
+		// If there is no movies
+		if(this.movies.size() == 0) {
+			return 0;
+		}
+		
 		for(int i = 0; i < this.movies.size(); i++) { // For each movie
 			nbComment += this.movies.get(i).getComments().size(); // Get number of comment
 		}		
 		
 		return nbComment / this.movies.size();
 	}
-	public int getMediumScorePerMovie() {
+	public int getMediumScore() {
 		int res = 0;
-		int nbComment = 0;
+		int nbScore = 0;
+
+		// If there is no movies
+		if(this.movies.size() == 0) {
+			return 0;
+		}
 		
 		for(int i = 0; i < this.movies.size(); i++) { // For each movie
 			for (int j = 0; j < this.movies.get(i).getScores().size(); j++) { // For each score
 				res += this.movies.get(i).getScores().get(j).getValue();
-				nbComment ++;
+				nbScore ++;
 			}
-		}		
+		}
+
+		// If there is no scores
+		if(nbScore == 0) {
+			return 0;
+		}
 		
-		return res / nbComment;
-	}
-	
-	// Destroyers
-	public boolean deleteMovie(Movie movie) {
-		return this.movies.remove(movie);
-		// And delete associated score
+		return res / nbScore;
 	}
 	
 	// Searchers
@@ -113,9 +136,9 @@ public class Movies {
 		List<Movie> res = new ArrayList<Movie>();
 		
 		for(int i = 0; i < this.movies.size(); i++) {
-			/*if(this.movies.get(i).getTitle().contains(title)) {
+			if(this.movies.get(i).getTitle().contains(title)) {
 				res.add(this.movies.get(i));
-			}*/
+			}
 		}
 		
 		return res;
@@ -124,11 +147,9 @@ public class Movies {
 		List<Movie> res = new ArrayList<Movie>();
 		
 		for(int i = 0; i < this.movies.size(); i++) { // For each movie
-			/*for(j = 0; j < this.movies.get(i).getTheme().size(); j++) { // For each theme
-				if(this.movies.get(i).getTheme().get(j).contains(theme)) {
-					res.add(this.movies.get(i));
-				}
-			}*/
+			if(this.movies.get(i).getTheme().toLowerCase().contains(theme.toLowerCase())) {
+				res.add(this.movies.get(i));
+			}
 		}
 		
 		return res;
@@ -137,11 +158,11 @@ public class Movies {
 		List<Movie> res = new ArrayList<Movie>();
 		
 		for(int i = 0; i < this.movies.size(); i++) { // For each movie
-			/*for(j = 0; j < this.movies.get(i).getProducers().size(); j++) { // For each producer
-				if(this.movies.get(i).getProducers().get(j).contains(theme)) {
+			for(int j = 0; j < this.movies.get(i).getProducteurs().size(); j++) { // For each producer
+				if(this.movies.get(i).getProducteurs().get(j).toLowerCase().contains(producer.toLowerCase())) {
 					res.add(this.movies.get(i));
 				}
-			}*/
+			}
 		}
 		
 		return res;
@@ -150,22 +171,23 @@ public class Movies {
 		List<Movie> res = new ArrayList<Movie>();
 		
 		for(int i = 0; i < this.movies.size(); i++) { // For each movie
-			/*for(j = 0; j < this.movies.get(i).getProducers().size(); j++) { // For each producer
-				if(this.movies.get(i).getProducers().get(j).contains(theme)) {
+			for(int j = 0; j < this.movies.get(i).getActeursPrincipaux().size(); j++) { // For each producer
+				if(this.movies.get(i).getActeursPrincipaux().get(j).toLowerCase().contains(actor.toLowerCase())) {
 					res.add(this.movies.get(i));
 				}
-			}*/
+			}
 		}
 		
 		return res;
 	}
+	@SuppressWarnings("deprecation")
 	public List<Movie> searchMovieByProductionDate(Date date){
 		List<Movie> res = new ArrayList<Movie>();
 		
 		for(int i = 0; i < this.movies.size(); i++) {
-			/*if(this.movies.get(i).getProductionDate().getYear() == date.getYear()) {
+			if(this.movies.get(i).getProductionDate().getYear() == date.getYear()) {
 				res.add(this.movies.get(i));
-			}*/
+			}
 		}
 		
 		return res;
@@ -174,20 +196,20 @@ public class Movies {
 		List<Movie> res = new ArrayList<Movie>();
 		
 		for(int i = 0; i < this.movies.size(); i++) {
-			/*if(this.movies.get(i).getScore() >= score) {
+			if(this.movies.get(i).getNoteMoyenne() >= score) {
 				res.add(this.movies.get(i));
-			}*/
+			}
 		}
 		
 		return res;
 	}
-	public List<Movie> searchMovieByPrice(long price){
+	public List<Movie> searchMovieByPrice(double price){
 		List<Movie> res = new ArrayList<Movie>();
 		
 		for(int i = 0; i < this.movies.size(); i++) {
-			/*if(this.movies.get(i).getPrice() <= price) {
+			if(this.movies.get(i).getPrice() <= price) {
 				res.add(this.movies.get(i));
-			}*/
+			}
 		}
 		
 		return res;
@@ -225,18 +247,11 @@ public class Movies {
 			    writer.write(movieFields[4] + "\n");
 			    writer.write(movies.get(i).getProductionDate().getTime() + "\n");
 			    writer.write(movieFields[5] + "\n");
-			    for (int j = 0; j < movies.get(i).getScores().size(); j++){
-				    writer.write(movies.get(i).getScores().get(j) + "\n");
-			    }
-			    writer.write(movieFields[6] + "\n");
-			    writer.write(movies.get(i).getNoteMoyenne() + "\n");
-			    writer.write(movieFields[7] + "\n");
-			    for (int j = 0; j < movies.get(i).getComments().size(); j++){
-				    writer.write(movies.get(i).getComments().get(j) + "\n");
-			    }
-			    writer.write(movieFields[8] + "\n");
 			    writer.write(movies.get(i).getDescription() + "\n");
-			    // Price
+			    writer.write(movieFields[6] + "\n");
+			    writer.write(movies.get(i).getTitle() + "\n");
+			    writer.write(movieFields[7] + "\n");
+			    writer.write(movies.get(i).getPrice() + "\n");
 			    
 			    writer.close();
 			}
@@ -245,8 +260,7 @@ public class Movies {
 	        System.out.println("An error occurred : We could not save your modifications about movies");
 	    }	
 	}
-	@SuppressWarnings("deprecation")
-	void readSavedMovies() {
+	public void readSavedMovies() {
 		File bddMoviesDirectory = new File("Bdd/Movies");
 		
 		// Check if there is saved data, if not : stop the function (there is no data to read)
@@ -261,14 +275,14 @@ public class Movies {
 			
 			// Create needed variables to add a movie
 			int code = -1;
+			String title = "";
 			String theme = "";
 			List<String> producers = new ArrayList<String>();
 			List<String> mainActors = new ArrayList<String>();
 			Date productionDate = null;
-			double meanScore = 0;
 			String description = "";
 			String temp = "";
-			// Price
+			double price = 0;
 			
 			try {
 				
@@ -308,18 +322,20 @@ public class Movies {
 			    		case 4 :
 			    			productionDate = new Date(Long.parseLong(lineInFile.trim()));
 			    			break;
-			    		case 6 :
-			    			temp = lineInFile.trim();
-			    			if(temp.split("\\.").length >= 2) {
-				    			meanScore = Integer.parseInt(temp.split("\\.")[0]) + 0.01 * Integer.parseInt(temp.split("\\.")[1]);
-			    			} else {
-				    			meanScore = Integer.parseInt(temp);
-			    			}
-			    			break;
-			    		case 8 :
+			    		case 5 :
 			    			description = lineInFile.trim();
 			    			break;
-			    		// Price
+			    		case 6 :
+			    			title = lineInFile.trim();
+			    			break;
+			    		case 7 :
+			    			temp = lineInFile.trim();
+			    			if(temp.split("\\.").length >= 2) {
+			    				price = Integer.parseInt(temp.split("\\.")[0]) + 0.01 * Integer.parseInt(temp.split("\\.")[1]);
+			    			} else {
+			    				price = Integer.parseInt(temp);
+			    			}
+			    			break;
 		    			default :
 		    				break;
 			    		}
@@ -328,7 +344,7 @@ public class Movies {
 			    	lineInFile = reader.readLine(); // Read the next line of the current file
 			    }
 
-			    Movie movie = new Movie(code, theme, productionDate, description, mainActors, producers, null, null, meanScore, 0);
+			    Movie movie = new Movie(title, code, theme, productionDate, description, mainActors, producers, null, null, price);
 			    addMovie(movie);
 			
 			} catch (IOException e) { // Display a message if an error has occurred while reading in the files

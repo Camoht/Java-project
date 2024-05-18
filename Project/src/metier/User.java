@@ -34,7 +34,27 @@ public class User {
         this.comments = comments != null ? comments : new ArrayList<>();
     }
 
-    // Getters and setters
+    public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public List<Score> getScores() {
+		return scores;
+	}
+
+	public void setScores(List<Score> scores) {
+		this.scores = scores;
+	}
+
+	public void setSubscribe(boolean isSubscribe) {
+		this.isSubscribe = isSubscribe;
+	}
+
+	// Getters and setters
     public boolean getIsSubscribe() {
     	return isSubscribe;
     }

@@ -13,8 +13,6 @@ import java.util.List;
 
 import comparators.commentComparatorByDate;
 import comparators.commentComparatorByPositivity;
-import comparators.movieComparatorByDate;
-import comparators.movieMostAppreciated;
 import metier.Comment;
 import metier.Movie;
 import metier.User;
@@ -31,6 +29,11 @@ public class Comments {
 		    "Movie Code :",
 		    "Author Code :"
 	};
+	
+	// Initialize
+	public Comments() {
+		this.comments = new ArrayList<Comment>();
+	}
 	
 	// Sorters
 	public void sortCommentByDate() {
@@ -67,7 +70,7 @@ public class Comments {
 			    writer.write(commentFields[2] + "\n");
 			    writer.write(comments.get(i).getPublicationDate().getTime() + "\n");
 			    writer.write(commentFields[3] + "\n");
-			    //writer.write(comments.get(i).getActivated() + "\n");
+			    writer.write(comments.get(i).isActivated() + "\n");
 			    writer.write(commentFields[4] + "\n");
 			    writer.write(comments.get(i).getMovie().getCode() + "\n");
 			    writer.write(commentFields[5] + "\n");
@@ -81,7 +84,7 @@ public class Comments {
 	    }
 	}
 	@SuppressWarnings("deprecation")
-	void readSavedComments() {
+	void readSavedComments(Movies movies, Users users) {
 		File bddCommentsDirectory = new File("Bdd/Comments");
 		
 		// Check if there is saved data, if not : stop the function (there is no data to read)
@@ -147,8 +150,9 @@ public class Comments {
 
 			    	lineInFile = reader.readLine(); // Read the next line of the current file
 			    }
+
+			    addComment(new Comment(code, texte, publicationDate, activated, movies.getMovie(movieCode), users.getUser(authorCode)));
 			    
-			    // addAdmin(new User(listOfFile[i], password, surname, name, subscriber));
 			} catch (IOException e) { // Display a message if an error has occurred while reading in the files
 		        System.out.println("An error occurred : We could not get saved informations");
 		    }
@@ -168,11 +172,22 @@ public class Comments {
 		return null;
 	}
 
-	// Adders
+	// Adders and deletes
 	public void addComment(Comment comment) {
 		this.comments.add(comment);
 	}	
 	public void addComment(String text, Movie movie, User author) {
 		this.comments.add(new Comment(this.comments.size() + 1, text, new Date(System.currentTimeMillis()), true, movie, author));
+	}
+	public void deleteComment(Comment comment) {
+		this.comments.remove(comment);
+	}
+	public void deleteComment(int code) {
+		for(int i = 0; i < this.comments.size(); i++) {
+			if(this.comments.get(i).getCode() == code) {
+				this.comments.remove(i);
+				return;
+			}
+		}
 	}
 }

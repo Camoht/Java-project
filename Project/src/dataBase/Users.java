@@ -7,14 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import comparators.movieMostAppreciated;
-import metier.Admin;
-import metier.Comment;
-import metier.Movie;
-import metier.Purchase;
 import metier.User;
 
 public class Users {
@@ -33,6 +27,11 @@ public class Users {
 		    "Subscriber :"
 	};
 
+	// Initialize
+	public Users() {
+		this.users = new ArrayList<User>();
+	}
+	
 	// Getters
 	public List<User> getUsers(){
 		return users;
@@ -47,11 +46,9 @@ public class Users {
 	}
 	public User getUser(String mail) {
 		for(int i = 0; i < this.users.size(); i++) {
-			/*
-			if(this.users.get(i).getMail() == mail) {
+			if(this.users.get(i).getEmail() == mail) {
 				return this.users.get(i);
 			}
-			*/
 		}
 		return null;
 	}
@@ -61,11 +58,28 @@ public class Users {
 		this.users.add(user);
 	}
 	public void addUser(boolean isAdmin, String email, String motDePasse, String nom, String prenom, String adresse, String phraseSecrete) {
-		this.users.add(new User(this.users.size() + 1, null, isAdmin, null, null, email, motDePasse, nom, prenom, adresse, phraseSecrete));
+		this.users.add(new User(false, this.users.size() + 1, null, isAdmin, null, null, email, motDePasse, nom, prenom, adresse, phraseSecrete));
 	}
-	public boolean deleteUser(User user) {
+	public boolean deleteUser(User user, Scores scores, Comments comments, Purchases purchases) {
+		// Delete his scores
+		if(scores != null) {
+			for(int i = 0; i < user.getScores().size(); i++) {
+				scores.deleteScore(user.getScores().get(i).getCode());
+			}
+		}
+		// Delete his comments
+		if(comments != null) {
+			for(int i = 0; i < user.getComment().size(); i++) {
+				comments.deleteComment(user.getComment().get(i).getCode());
+			}
+		}
+		// Delete his purchases
+		if(purchases != null) {
+			for(int i = 0; i < user.getHistoriqueAchats().size(); i++) {
+				purchases.deletePurchase(user.getHistoriqueAchats().get(i).getCode());
+			}
+		}
 		return this.users.remove(user);
-		// And delete associated score
 	}
 	
 	// Makers of statistics
@@ -76,11 +90,9 @@ public class Users {
 		int res = 0;
 		
 		for(int i = 0; i < this.users.size(); i++) { // For each users
-			/*
-			if(this.users.get(i).isSubsrcibed()) { // Is subscribed ?
+			if(this.users.get(i).getIsSubscribe()) { // Is subscribed ?
 				res++;
 			}
-			*/
 		}
 		
 		return res;
@@ -120,9 +132,7 @@ public class Users {
 			    writer.write(userFields[7] + "\n");
 			    writer.write(users.get(i).getIsAdmin() + "\n");
 			    writer.write(userFields[8] + "\n");
-			    /*
-			    writer.write(users.get(i).getSubscriber() + "\n");
-			    */
+			    writer.write(users.get(i).getIsSubscribe() + "\n");
 			    
 			    writer.close();
 			}
@@ -132,23 +142,21 @@ public class Users {
 	    }
 	}
 	public User connect(String email, String password) {
-		User res = null;
 		for (int i = 0; i < this.users.size(); i++) {
 			if(this.users.get(i).getEmail().equals(email) && this.users.get(i).getMotDePasse().equals(password)) {
 				return this.users.get(i);
 			}
 		}
-		return res;
+		return null;
 	}
 	public User connectWithSentence(String email, String secretSentence) {
-		User res = null;
 		System.out.println(this.users.size());
 		for (int i = 0; i < this.users.size(); i++) {
 			if(this.users.get(i).getEmail().equals(email) && this.users.get(i).getPhraseSecrete().equals(secretSentence)) {
 				return this.users.get(i);
 			}
 		}
-		return res;
+		return null;
 	}
 	public int emailAndSecretSentenceInBdd(String email, String secretSentence) {
 		for (int i = 0; i < this.users.size(); i++) {
@@ -236,10 +244,9 @@ public class Users {
 	
 				    	lineInFile = reader.readLine(); // Read the next line of the current file
 				    }
-				    
-				    User user = new User(code, null, isAdmin, null, null, email, password, surname, name, adresse, secretSentence);
+
+				    User user = new User(subscriber, code, null, isAdmin, null, null, email, password, surname, name, adresse, secretSentence);
 				    addUser(user);
-				    // subscriber
 				}
 			    
 			} catch (IOException e) { // Display a message if an error has occurred while reading in the files

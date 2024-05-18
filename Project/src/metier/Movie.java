@@ -153,6 +153,9 @@ public class Movie {
         Comment comment = new Comment(code, text, publicationDate, activated, this, author);
         comments.add(comment);
     }
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
 
     public void removeComment(Comment comment, User user) {
         if (user.getIsAdmin() || comment.getAuthor().equals(user)) {
@@ -185,6 +188,9 @@ public class Movie {
         }
         // Si l'utilisateur n'a pas encore donné de note, ajouter la nouvelle note
         Score score = new Score(code, value, date, this, user);
+        scores.add(score);
+    }
+    public void addScore(Score score) {
         scores.add(score);
     }
 
