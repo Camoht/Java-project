@@ -6,7 +6,6 @@ public class commentComparatorByDate implements java.util.Comparator<Comment> {
 	
 	@Override
     public int compare(Comment a, Comment b) {
-        // return a.getDate().after(b.getDate());
-		return 0;
+        return a.getPublicationDate().after(b.getPublicationDate()) == true ? 1 : 0;
     }
 }

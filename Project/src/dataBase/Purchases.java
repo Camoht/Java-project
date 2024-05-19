@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import metier.Movie;
 import metier.Purchase;
 import metier.User;
 
@@ -43,9 +44,10 @@ public class Purchases {
 			// Save Movies :
 			for (int i = 0; i < this.purchases.size(); i++) {
 			    
-				// Write data in the file
+				// In the file
 			    writer = new BufferedWriter(new FileWriter("Bdd/Purchases/" +  purchases.get(i).getCode() + ".txt"));
 			    
+			    // Write date
 			    writer.write(purchaseFields[0] + "\n");
 			    writer.write(purchases.get(i).getCode() + "\n");
 			    writer.write(purchaseFields[1] + "\n");
@@ -53,6 +55,11 @@ public class Purchases {
 			    writer.write(purchaseFields[2] + "\n");
 			    writer.write(purchases.get(i).getDateAchat().getTime() + "\n");
 			    writer.write(purchaseFields[3] + "\n");
+			    writer.write(purchases.get(i).getMontant() + "\n");
+			    writer.write(purchaseFields[4] + "\n");
+			    for(int j = 0; j < this.purchases.get(i).getPanier().size(); j++) {
+				    writer.write(this.purchases.get(i).getPanier().get(j) + "\n");
+			    }
 			    writer.write(purchases.get(i).getMontant() + "\n");
 			    
 			    writer.close();
@@ -62,7 +69,8 @@ public class Purchases {
 	        System.out.println("An error occurred : We could not save your modifications about purchases");
 	    }	
 	}
-	public void readSavedPurchases(Users users) {
+	public void readSavedPurchases(Users users, Movies movies) {
+		
 		File bddMoviesDirectory = new File("Bdd/Purchases");
 		
 		// Check if there is saved data, if not : stop the function (there is no data to read)
@@ -81,6 +89,7 @@ public class Purchases {
 			Date buyingDate = null;
 			double amont = 0;
 			String temp = "";
+			List<Integer> moviesCode = new ArrayList<>();
 			
 			try {
 				
@@ -122,6 +131,9 @@ public class Purchases {
 			    				amont = Integer.parseInt(temp);
 			    			}
 			    			break;
+			    		case 4 :
+			    			moviesCode.add(Integer.parseInt(lineInFile.trim()));
+			    			break;
 		    			default :
 		    				break;
 			    		}
@@ -130,7 +142,13 @@ public class Purchases {
 			    	lineInFile = reader.readLine(); // Read the next line of the current file
 			    }
 
-			    addPurchase(new Purchase(code, users.getUser(userCode), buyingDate, amont));
+			    // Get movies
+			    List<Movie> panier = new ArrayList<>();
+			    for(int j = 0; j < moviesCode.size(); j++) {
+			    	panier.add(movies.getMovie(moviesCode.get(j)));
+			    }
+			    
+			    addPurchase(new Purchase(code, users.getUser(userCode), buyingDate, amont, panier));
 			
 			} catch (IOException e) { // Display a message if an error has occurred while reading in the files
 		        System.out.println("An error occurred : We could not get saved informations");
@@ -143,27 +161,30 @@ public class Purchases {
 		return this.purchases;
 	}
 	public Purchase getPurchase(int code) {
-		for (int i = 0; i < this.purchases.size(); i++) {
-			if (this.purchases.get(i).getCode() == code) {
+		
+		for (int i = 0; i < this.purchases.size(); i++) { // For each pruchase
+			if (this.purchases.get(i).getCode() == code) { // If his code is the one we are searching or
 				return this.purchases.get(i);
 			}
 		}
-		return null;
+		
+		return null; // Purchase not found
 	}
 	
 	// Adders and Destroyers
 	public void addPurchase(Purchase purchase) {
 		this.purchases.add(purchase);
 	}
-	public void addPurchase(User user, double montant) {
-		this.purchases.add(new Purchase(this.purchases.size() + 1, user, new Date(System.currentTimeMillis()), montant));
+	public void addPurchase(User user, double montant, List<Movie> panier) {
+		this.purchases.add(new Purchase(this.purchases.size() + 1, user, new Date(System.currentTimeMillis()), montant, panier));
 	}
 	public void deletePurchase(Purchase purchase) {
 		this.purchases.remove(purchase);
 	}
 	public void deletePurchase(int code) {
-		for(int i = 0; i < this.purchases.size(); i++) {
-			if(this.purchases.get(i).getCode() == code) {
+		
+		for(int i = 0; i < this.purchases.size(); i++) { // For each purchase
+			if(this.purchases.get(i).getCode() == code) { // If his code is the one we are searching or
 				this.purchases.remove(i);
 				return;
 			}

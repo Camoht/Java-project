@@ -164,15 +164,18 @@ public class Comments {
  		return comments;
  	}
 	public Comment getComment(int code) {
-		for (int i = 0; i < this.comments.size(); i++) {
-			if (this.comments.get(i).getCode() == code) {
+		
+		for (int i = 0; i < this.comments.size(); i++) { // For each comment
+			if (this.comments.get(i).getCode() == code) { // If his code is the one we are searching for
 				return this.comments.get(i);
 			}
 		}
+		
+		// Comment not found
 		return null;
 	}
 
-	// Adders and deletes
+	// Adder and deleter
 	public void addComment(Comment comment) {
 		this.comments.add(comment);
 	}	
@@ -183,8 +186,8 @@ public class Comments {
 		this.comments.remove(comment);
 	}
 	public void deleteComment(int code) {
-		for(int i = 0; i < this.comments.size(); i++) {
-			if(this.comments.get(i).getCode() == code) {
+		for(int i = 0; i < this.comments.size(); i++) { // For each comment
+			if(this.comments.get(i).getCode() == code) { // If his code is the one we are searching for
 				this.comments.remove(i);
 				return;
 			}

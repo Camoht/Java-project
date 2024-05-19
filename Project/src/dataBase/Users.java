@@ -37,30 +37,57 @@ public class Users {
 		return users;
 	}
 	public User getUser(int code) {
-		for(int i = 0; i < this.users.size(); i++) {
-			if(this.users.get(i).getCode() == code) {
+		
+		for(int i = 0; i < this.users.size(); i++) { // For each user
+			if(this.users.get(i).getCode() == code) { // If his code is the one we are searching or
 				return this.users.get(i);
 			}
 		}
-		return null;
+		
+		return null; // User not found
 	}
 	public User getUser(String mail) {
-		for(int i = 0; i < this.users.size(); i++) {
-			if(this.users.get(i).getEmail() == mail) {
+		
+		for(int i = 0; i < this.users.size(); i++) { // For each user
+			if(this.users.get(i).getEmail() == mail) { // If his email is the one we are searching or
 				return this.users.get(i);
 			}
 		}
-		return null;
+		
+		return null; // User not found
 	}
 	
 	// Adder & Destroyer
-	public void addUser(User user) {
+	public boolean addUser(User user) {
+		
+		// Check if some user already have that email
+		for (int i = 0; i < this.users.size(); i++) { // For each user
+			if(this.users.get(i).getEmail() == user.getEmail()) { // If his email is the one we are searching or
+				return false;
+			}
+		}
+		
+		// Add the new user
 		this.users.add(user);
+		
+		return true;
 	}
-	public void addUser(boolean isAdmin, String email, String motDePasse, String nom, String prenom, String adresse, String phraseSecrete) {
+	public boolean addUser(boolean isAdmin, String email, String motDePasse, String nom, String prenom, String adresse, String phraseSecrete) {
+
+		// Check if some user already have that email
+		for (int i = 0; i < this.users.size(); i++) {
+			if(this.users.get(i).getEmail().equals(email)) {
+				return false;
+			}
+		}
+		
+		// Add the new user
 		this.users.add(new User(false, this.users.size() + 1, null, isAdmin, null, null, email, motDePasse, nom, prenom, adresse, phraseSecrete));
+		
+		return true;
 	}
 	public boolean deleteUser(User user, Scores scores, Comments comments, Purchases purchases) {
+		
 		// Delete his scores
 		if(scores != null) {
 			for(int i = 0; i < user.getScores().size(); i++) {
@@ -79,6 +106,7 @@ public class Users {
 				purchases.deletePurchase(user.getHistoriqueAchats().get(i).getCode());
 			}
 		}
+		
 		return this.users.remove(user);
 	}
 	
@@ -112,9 +140,10 @@ public class Users {
 			// Save Users :
 			for (int i = 0; i < this.users.size(); i++) {
 				
-				// Write data in the file
+				// In the file
 			    writer = new BufferedWriter(new FileWriter("Bdd/Users/" +  users.get(i).getEmail() + ".txt"));
 
+			    // Write data
 			    writer.write(userFields[0] + "\n");
 			    writer.write(users.get(i).getCode() + "\n");
 			    writer.write(userFields[1] + "\n");
@@ -142,31 +171,34 @@ public class Users {
 	    }
 	}
 	public User connect(String email, String password) {
-		for (int i = 0; i < this.users.size(); i++) {
-			if(this.users.get(i).getEmail().equals(email) && this.users.get(i).getMotDePasse().equals(password)) {
+		
+		for (int i = 0; i < this.users.size(); i++) { // For each user
+			if(this.users.get(i).getEmail().equals(email) && this.users.get(i).getMotDePasse().equals(password)) { // It has the same email and password the the one we are searching for
 				return this.users.get(i);
 			}
 		}
 		return null;
 	}
 	public User connectWithSentence(String email, String secretSentence) {
-		System.out.println(this.users.size());
-		for (int i = 0; i < this.users.size(); i++) {
-			if(this.users.get(i).getEmail().equals(email) && this.users.get(i).getPhraseSecrete().equals(secretSentence)) {
+		
+		for (int i = 0; i < this.users.size(); i++) { // For each user
+			if(this.users.get(i).getEmail().equals(email) && this.users.get(i).getPhraseSecrete().equals(secretSentence)) { // It has the same email and secret sentence the the one we are searching for
 				return this.users.get(i);
 			}
 		}
 		return null;
 	}
 	public int emailAndSecretSentenceInBdd(String email, String secretSentence) {
-		for (int i = 0; i < this.users.size(); i++) {
-			if(this.users.get(i).getEmail().equals(email) && this.users.get(i).getPhraseSecrete().equals(secretSentence)) {
+		
+		for (int i = 0; i < this.users.size(); i++) { // For each user
+			if(this.users.get(i).getEmail().equals(email) && this.users.get(i).getPhraseSecrete().equals(secretSentence)) { // It has the same email and secret sentence the the one we are searching for
 				return 1;
 			}
 		}
 		return 0;
 	}
 	void readSavedUsers() {
+		
 		File bddUSersDirectory = new File("Bdd/Users");
 		
 		// Check if there is saved data, if not : stop the function (there is no data to read)

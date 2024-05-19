@@ -58,9 +58,10 @@ public class Scores {
 			// Save Movies :
 			for (int i = 0; i < this.scores.size(); i++) {
 			    
-				// Write data in the file
+				// In the file
 			    writer = new BufferedWriter(new FileWriter("Bdd/Purchases/" +  scores.get(i).getCode() + ".txt"));
 			    
+			    // Write data
 			    writer.write(scoreFields[0] + "\n");
 			    writer.write(scores.get(i).getCode() + "\n");
 			    writer.write(scoreFields[1] + "\n");
@@ -80,6 +81,7 @@ public class Scores {
 	    }	
 	}
 	public void readSavedScores(Users users, Movies movies) {
+		
 		File bddMoviesDirectory = new File("Bdd/Scores");
 		
 		// Check if there is saved data, if not : stop the function (there is no data to read)
@@ -165,8 +167,9 @@ public class Scores {
 		this.scores.remove(score);
 	}
 	public void deleteScore(int code) {
-		for(int i = 0; i < this.scores.size(); i++) {
-			if(this.scores.get(i).getCode() == code) {
+		
+		for(int i = 0; i < this.scores.size(); i++) { // For each score
+			if(this.scores.get(i).getCode() == code) { // If his code is the one we are searching or
 				this.scores.remove(i);
 				return;
 			}

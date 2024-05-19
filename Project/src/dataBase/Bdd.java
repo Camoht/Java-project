@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import metier.*;
-
 public class Bdd {
 
 	// Fields
@@ -34,12 +32,10 @@ public class Bdd {
 	public void test() {
 		// Users
 		this.users.addUser(true, "email", "mdp", "nom", "prenom", "adresse", "mot");
-		//this.users.addUser(true, "emailA", "mdpA", "nomA", "prenomA", "adresseA", "motA");
+		this.users.addUser(true, "emailA", "mdpA", "nomA", "prenomA", "adresseA", "motA");
 		// Purchase
-		/*
 		this.addPurchase(1, 12);
 		this.addPurchase(1, 4);
-		*/
 		// Movies
 		Date date = new Date(2003, 03, 05);
 		List<String> acteursPrincipaux = new ArrayList<>();
@@ -50,7 +46,6 @@ public class Bdd {
 		producteurs.add("producteurB");
 		this.movies.addMovie("titre", "theme", date, "description", acteursPrincipaux, producteurs, 2);
 
-		/*
 		date = new Date(2001, 12, 05);
 		acteursPrincipaux = new ArrayList<>();
 		acteursPrincipaux.add("acteurA2");
@@ -61,13 +56,12 @@ public class Bdd {
 		this.movies.addMovie("titre2", "theme2", date, "description2", acteursPrincipaux, producteurs, 3);
 		// Comment
 		this.comments.addComment("text du commentaire", this.getMovies().getMovie(1), this.getUsers().getUser(1));
-		this.comments.getComment(1).setActivated(false);
+		//this.comments.getComment(1).setActivated(false);
 		this.movies.getMovie(1).addComment(this.comments.getComment(1));
 		this.users.getUser(1).addMovieToPanier(this.movies.getMovie(1));
 		this.users.getUser(1).addMovieToPanier(this.movies.getMovie(2));
-		*/
 		// Score
-		this.scores.addScore(new Score(1, 4, null, this.movies.getMovie(1), this.users.getUser(1)));
+		//this.scores.addScore(new Score(1, 4, null, this.movies.getMovie(1), this.users.getUser(1)));
 	}
 	@SuppressWarnings("deprecation")
 	public void testSavedBdd() {
@@ -81,6 +75,14 @@ public class Bdd {
 			System.out.println("Adresse = " + this.getUsers().getUsers().get(i).getAdresse());
 			System.out.println("Mot secret = " + this.getUsers().getUsers().get(i).getPhraseSecrete());
 			System.out.println("Est Admin = " + this.getUsers().getUsers().get(i).getIsAdmin());
+			System.out.print("Purchases numéro = ");
+			for(int j = 0; j < this.getUsers().getUsers().get(i).getHistoriqueAchats().size(); j++) {
+				System.out.print(this.getUsers().getUsers().get(i).getHistoriqueAchats().get(j).getCode());
+				if(j != this.getUsers().getUsers().get(i).getHistoriqueAchats().size() - 1) {
+					System.out.print(", ");
+				}
+			}
+			System.out.println();
 			System.out.println();
 		}
 		// Movie
@@ -114,6 +116,14 @@ public class Bdd {
 			System.out.println("Code de l'acheteur = " + this.purchases.getPurchases().get(i).getUser().getCode());
 			System.out.println();
 		}
+		// Score
+		for (int i = 0; i < this.scores.getScores().size(); i++) {
+			System.out.println("Score numéro = " + this.scores.getScores().get(i).getCode());
+			System.out.println("Montant = " + this.scores.getScores().get(i).getValue());
+			System.out.println("Movie numéro = " + this.scores.getScores().get(i).getMovie().getCode());
+			System.out.println("User numéro = " + this.scores.getScores().get(i).getUser().getCode());
+			System.out.println();
+		}
 	}
 	public void close() {
 		saveBdd();
@@ -139,7 +149,7 @@ public class Bdd {
 		movies.readSavedMovies();
 		users.readSavedUsers();
 		comments.readSavedComments(movies, users);
-		purchases.readSavedPurchases(users);
+		purchases.readSavedPurchases(users, movies);
 		scores.readSavedScores(users, movies);
 		
 		// Connect objects between them
@@ -192,15 +202,16 @@ public class Bdd {
 		this.users.getUser(userId).addComment(this.comments.getComment(commentId)); // Add the comment object to the user object
 	}
 	public void addScore(int userId, int movieId, Long value) {
-		int scoreId = this.scores.getScores().size() + 1; // Get Score id
 		
 		// If the user has already made a comment about this movie
-		for(int i = 0; i < this.users.getUser(userId).getComment().size(); i++) {
-			if(this.users.getUser(userId).getComment().get(i).getMovie().getCode() == this.movies.getMovie(movieId).getCode()) {
-				this.scores.getScore(scoreId).setValue(value);; // Change score content
+		for(int i = 0; i < this.users.getUser(userId).getScores().size(); i++) {
+			if(this.users.getUser(userId).getScores().get(i).getMovie().getCode() == movieId) {
+				this.users.getUser(userId).getScores().get(i).setValue(value); // Change score content
 				return;
 			}
 		}
+		
+		int scoreId = this.scores.getScores().size() + 1; // Get Score id
 		
 		// If the user has never gave a score about this movie
 		this.scores.addScore(value, this.movies.getMovie(movieId), this.users.getUser(userId));
@@ -208,8 +219,8 @@ public class Bdd {
 		this.users.getUser(userId).addScore(this.scores.getScore(scoreId)); // Add the score object to the user object
 	}
 	public void addPurchase(int userId, long montant) {
-		int purchaseId = this.scores.getScores().size() + 1; // Get Purchase id
-		this.purchases.addPurchase(this.users.getUser(userId), montant);
+		int purchaseId = this.purchases.getPurchases().size() + 1; // Get Purchase id
+		this.purchases.addPurchase(this.users.getUser(userId), montant, this.users.getUser(userId).getPanier());
 		this.users.getUser(userId).addPurchaseToHistorique(this.purchases.getPurchase(purchaseId));
 	}
 }

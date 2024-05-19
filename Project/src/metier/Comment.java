@@ -49,27 +49,23 @@ public class Comment {
 	public void setActivated(boolean activated) {
 		this.activated = activated;
 	}
-	
 	public void setCode(int code) {
 		this.code=code;
 	}
- 
 	public void setAuthor(User author) {
 		this.author = author;
 	}
-	// Methods
 	
+	// Methods
 	public void disableComment(Movie movie, User user, Comment comment) {
-		if (user.getIsAdmin()) {
+		
+		if (user.getIsAdmin()) { // 
 			if (this.activated==false) {
 				System.out.println("Commentaires déjà désactivés pour ce film.");
 			} else {
 				this.activated=false;
 				System.out.println("Commentaires désactivé pour ce film."); }
-		} else {
-			System.out.println("Accès refusé. Seuls les administrateurs peuvent désactiver les commentaires.");
-}
+			
+		}
 	}
-	
-
 }

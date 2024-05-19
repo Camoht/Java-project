@@ -14,6 +14,7 @@ import java.util.List;
 import comparators.movieComparatorByDate;
 import comparators.movieMostAppreciated;
 import metier.Movie;
+import metier.User;
 
 public class Movies {
 
@@ -43,23 +44,14 @@ public class Movies {
 		return movies;
 	}
 	public Movie getMovie(int code) {
-		for (int i = 0; i < this.movies.size(); i++) {
-			if (this.movies.get(i).getCode() == code) {
+		
+		for (int i = 0; i < this.movies.size(); i++) { // For each movie
+			if (this.movies.get(i).getCode() == code) { // If his code is the one we are searching for
 				return this.movies.get(i);
 			}
 		}
-		return null;
-	}
-	public List<Movie> getMoviesOfTheme(String theme){
-		List<Movie> res = new ArrayList<Movie>();
 		
-		for(int i = 0; i < this.movies.size(); i++) {
-			if (this.movies.get(i).getTheme().contains(theme)) {
-				res.add(this.movies.get(i));
-			}
-		}
-		
-		return res;
+		return null; // Movie not found
 	}
 	
 	// Adder
@@ -70,18 +62,21 @@ public class Movies {
 		this.movies.add(new Movie(title, this.movies.size() + 1, theme, productionDate, description, acteursPrincipaux, producteurs, null, null, price));
 	}
 	public boolean deleteMovie(Movie movie, Scores scores, Comments comments) {
+		
 		// Delete his scores
 		if(scores != null) {
 			for(int i = 0; i < movie.getScores().size(); i++) {
 				scores.deleteScore(movie.getScores().get(i).getCode());
 			}
 		}
+		
 		// Delete his comments
 		if(comments != null) {
 			for(int i = 0; i < movie.getComments().size(); i++) {
 				comments.deleteComment(movie.getComments().get(i).getCode());
 			}
 		}
+		
 		return this.movies.remove(movie);
 	}
 	
@@ -94,6 +89,7 @@ public class Movies {
         Collections.sort(movies, new movieComparatorByDate());
 	}
 	public int getMediumNumberOfCommentPerMovie() {
+		
 		int nbComment = 0;
 		
 		// If there is no movies
@@ -108,6 +104,7 @@ public class Movies {
 		return nbComment / this.movies.size();
 	}
 	public int getMediumScore() {
+		
 		int res = 0;
 		int nbScore = 0;
 
@@ -133,10 +130,11 @@ public class Movies {
 	
 	// Searchers
 	public List<Movie> searchMovieByTitle(String title){
+		
 		List<Movie> res = new ArrayList<Movie>();
 		
-		for(int i = 0; i < this.movies.size(); i++) {
-			if(this.movies.get(i).getTitle().contains(title)) {
+		for(int i = 0; i < this.movies.size(); i++) { // For each movie
+			if(this.movies.get(i).getTitle().contains(title)) { // If his title contains the one we are searching for
 				res.add(this.movies.get(i));
 			}
 		}
@@ -147,7 +145,7 @@ public class Movies {
 		List<Movie> res = new ArrayList<Movie>();
 		
 		for(int i = 0; i < this.movies.size(); i++) { // For each movie
-			if(this.movies.get(i).getTheme().toLowerCase().contains(theme.toLowerCase())) {
+			if(this.movies.get(i).getTheme().toLowerCase().contains(theme.toLowerCase())) { // If his theme is the one we are searching for
 				res.add(this.movies.get(i));
 			}
 		}
@@ -159,7 +157,7 @@ public class Movies {
 		
 		for(int i = 0; i < this.movies.size(); i++) { // For each movie
 			for(int j = 0; j < this.movies.get(i).getProducteurs().size(); j++) { // For each producer
-				if(this.movies.get(i).getProducteurs().get(j).toLowerCase().contains(producer.toLowerCase())) {
+				if(this.movies.get(i).getProducteurs().get(j).toLowerCase().contains(producer.toLowerCase())) { // If his producer is the one we are searching for
 					res.add(this.movies.get(i));
 				}
 			}
@@ -171,8 +169,8 @@ public class Movies {
 		List<Movie> res = new ArrayList<Movie>();
 		
 		for(int i = 0; i < this.movies.size(); i++) { // For each movie
-			for(int j = 0; j < this.movies.get(i).getActeursPrincipaux().size(); j++) { // For each producer
-				if(this.movies.get(i).getActeursPrincipaux().get(j).toLowerCase().contains(actor.toLowerCase())) {
+			for(int j = 0; j < this.movies.get(i).getActeursPrincipaux().size(); j++) { // For each actor
+				if(this.movies.get(i).getActeursPrincipaux().get(j).toLowerCase().contains(actor.toLowerCase())) { // If his actor is the one we are searching for
 					res.add(this.movies.get(i));
 				}
 			}
@@ -184,8 +182,8 @@ public class Movies {
 	public List<Movie> searchMovieByProductionDate(Date date){
 		List<Movie> res = new ArrayList<Movie>();
 		
-		for(int i = 0; i < this.movies.size(); i++) {
-			if(this.movies.get(i).getProductionDate().getYear() == date.getYear()) {
+		for(int i = 0; i < this.movies.size(); i++) { // For each movie
+			if(this.movies.get(i).getProductionDate().getYear() == date.getYear()) { // If his Production Date is the one we are searching for
 				res.add(this.movies.get(i));
 			}
 		}
@@ -193,21 +191,23 @@ public class Movies {
 		return res;
 	}
 	public List<Movie> searchMovieByScore(long score){
+		
 		List<Movie> res = new ArrayList<Movie>();
 		
-		for(int i = 0; i < this.movies.size(); i++) {
-			if(this.movies.get(i).getNoteMoyenne() >= score) {
+		for(int i = 0; i < this.movies.size(); i++) { // For each movie
+			if(this.movies.get(i).getNoteMoyenne() >= score) { // If his mean score is the better than the one we are searching for
 				res.add(this.movies.get(i));
 			}
 		}
 		
 		return res;
 	}
-	public List<Movie> searchMovieByPrice(double price){
+	public List<Movie> searchMovieByPrice(double price, User user){
+		
 		List<Movie> res = new ArrayList<Movie>();
 		
-		for(int i = 0; i < this.movies.size(); i++) {
-			if(this.movies.get(i).getPrice() <= price) {
+		for(int i = 0; i < this.movies.size(); i++) { // For each movie
+			if(this.movies.get(i).calculateReducedPrice(user) <= price) { // If his price is inferior to the one we are searching for
 				res.add(this.movies.get(i));
 			}
 		}
@@ -229,9 +229,10 @@ public class Movies {
 			// Save Movies :
 			for (int i = 0; i < this.movies.size(); i++) {
 			    
-				// Write data in the file
+				// In the file
 			    writer = new BufferedWriter(new FileWriter("Bdd/Movies/" +  movies.get(i).getCode() + ".txt"));
-			    
+
+				// Write data
 			    writer.write(movieFields[0] + "\n");
 			    writer.write(movies.get(i).getCode() + "\n");
 			    writer.write(movieFields[1] + "\n");

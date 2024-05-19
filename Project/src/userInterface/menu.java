@@ -14,40 +14,36 @@ public class menu {
 	private static String[][] toWrite = {
 			{"Se connecter", "Créer un compte", "Mot de passe oublié"} , // In the Welcome menu // 0
 			{"Veuillez renseigner votre :", "Email", "Mot de passe", "Mail ou Mot de passe incorrect"} , // In the connect menu // 1
-			{"Veuillez renseigner votre :", "Nom", "Prénom", "Mot de passe", "Email", "Adresse", "Votre mot préféré"} , // In the create an account menu // 2
+			{"Veuillez renseigner votre :", "Nom", "Prénom", "Mot de passe", "Email", "Adresse", "Votre mot préféré", "Cet adresse est déjà utilisée par un autre utilisateur, veuillez en choisir une autre"} , // In the create an account menu // 2
 			{"Veuillez renseigner votre :", "Email", "Phrase secrête", "Mail ou Phrase secrête incorrect", "Sélectionner votre nouveau mot de passe"} , // In forgotten password menu // 3
-			{"Afficher mes données", "Rechercher un film", "Explorer la liste des films", "Explorer mon historique", "Visualiser mon panier", "Visualiser mes achats"} , // In connected menu for client // 4
+			{"Afficher mes données", "Rechercher un film", "Explorer la liste des films", "Visualiser mon panier", "Visualiser mes achats"} , // In connected menu for client // 4
 			{"Afficher statistiques", "Ajouter un film", "Ajouter un administrateur"} , // In connected menu for admin // 5
 			{"Vos informations :", "Abonné", "Vous avez un compte administrateur", "Je souhaite : ", "Supprimer mon compte", "Modifier mon compte", "Votre compte a bien été supprimé"} , // Display informations about the user // 6
 			{"Je souhaite modifier :", "Mon nom", "Mon prénom", "Mon mot de passe", "Mon Email", "Je change mon abonnement", "Je le change pour :"} , // Modify the user's account //  7
 			{"Afficher les détails du film :", "Afficher plus de film"} , // Display the movie collection // 8
-			{"Titre :", "Catégories :", "Producteurs : ", "Acteurs principaux :", "Date de production :", "Avis du public :", "Description :", "Prix :", "Afficher les commentaires", "Ajouter le film à mon panier", "Attribuer une note", "Ajouter un commentaire"} , // Display movie's details // 9
+			{"Titre", "Catégories", "Producteurs", "Acteurs principaux", "Date de production", "Note moyenne", "Description", "Prix", "Afficher les commentaires", "Ajouter le film à mon panier", "Attribuer une note", "Ajouter un commentaire"} , // Display movie's details // 9
 			{"Modifier les informations du film", "Supprimer le film"} , // In displayMovieDetails menu for admin // 10
 			{"Je souhaite modifier :", "Titre", "Catégories", "Producteurs", "Acteurs principaux", "Année de production", "Description", "Prix", "Je le change pour :", "J'ajoute", "Je supprime"} , // Modify movie's information // 11
 			{"Ajouter un commentaire", "Aucun commentaire n'a été fait pour ce film", "Trier les commentaires par Date", "Trier les commentaires positifs", "Trier les commentaires négatifs"} , // Display movie's comments // 12
 			{"Cacher un commentaire :"} , // In displayCommentOfMovie menu for admin // 13
-			{"Rechercher par : ", "Titre",  "Catégorie", "Producteur", "Acteurs", "Année de production", "Avis du public", "Prix"} , // Search for a movie // 14
-			{"J'ai attribué la note :", "Je souhaite modifier cette note", "Je laisse cette note", "J'ajoute le note :"}, // Add score // 15
-			{"J'ai rédigé le commentaire :", "Je souhaite modifier ce commentaire", "Je laisse ce commentaire", "J'ajoute le commentaire"}, // Add comment // 16
+			{"Rechercher par : ", "Titre",  "Catégorie", "Producteur", "Acteurs", "Année de production", "Avis du public", "Prix", "Sélectionner votre recherche"} , // Search for a movie // 14
+			{"J'ai attribué la note", "Je souhaite modifier cette note", "Je laisse cette note", "J'ajoute la note (entre 1 et 10) :"}, // Add score // 15
+			{"Je rédige mon commentaire"}, // Add comment // 16
 			{"Valider", "Changer les caractéristiques du film", "Ajouter",  "Titre", "Thème", "Date de production", "Description", "Acteur principal", "Producteur", "Prix"}, // Add movie //17
 			{"Facture numéro ", "Date d'achat", "Prix", "Vous n'avez aucun achat"}, // Display purchase //18
 			{"Prix total", "Votre panier", "Payer", "Supprimer élément du panier", "Voir le détail d'un film", "Votre panier est vide"}, // Display panier //19
-	 		{"La base de données contient ", " utilisateurs", " abonnés", " films",
-	 			"Le nombre moyen de commentaires par film est ", "La note moyenne par film est "}, // Display statistics //20
-			
-			{"Mon historique"} , // Explore user's history
-			{"clients", "abonnés", "films", " du genre ", "sont les 3 films les plus appréciés", " du genre ", "correspond au nombre moyen de commentaires par film", "correspond au score moyen de par film"} , // Display statistics
+	 		{"La base de données contient ", " utilisateurs", " abonnés", " films", "Le nombre moyen de commentaires par film est ", "La note moyenne par film est "}, // Display statistics //20
 			
 			{"Bienvenu !", "Au revoir !"} , // In main menu
-			{"Quitter l'application", "Se déconnecter", "Annuler", "Retour au menu principal" ,  "Veuillez entrer un chiffre correspondant à une option ci-dessus"} // Other
+			{"Quitter l'application", "Se déconnecter", "Retour", "Retour au menu principal" ,  "Veuillez entrer un chiffre correspondant à une option ci-dessus"} // Other
 		};
 	private static String[] errors = {
 			"Erreur : Nous n'avons pas réussi à vous connecter",
 			"Erreur : Nous n'avons pas réussi à supprimer votre compte",
 			"Erreur : Nous n'avons pas réussi à supprimer ce film"
 	};
-	private static int nbMovie = 1;
-	private int nbMovieToDisplay = 1;
+	private static int nbMovie = 3;
+	private int nbMovieToDisplay = nbMovie;
 	private boolean continu = true;
 	private int menuId = 0;
 	private Bdd bdd = new Bdd();
@@ -59,12 +55,16 @@ public class menu {
 		System.out.println(toWrite[toWrite.length - 2][0]); // Welcome the user
 		
 		// Pour mes tests
+		/*
 		this.user = this.bdd.getUsers().getUser(1);
 		this.movie = this.bdd.getMovies().getMovie(1);
-		//this.menuId = 20;
+		this.menuId = 2;
+		*/
 		
 		while(continu) {
 			redirect();
+			System.out.println();
+			System.out.println();
 		}
 
 		System.out.println(toWrite[toWrite.length - 2][1]); // Inform the user he has quit the application
@@ -81,8 +81,10 @@ public class menu {
         
         // Translate it into an integer
         int res = -1;
-        if(answer.length() > 0) {
-            res = (int) (answer.charAt(0) - '0');
+        try {
+            res = Integer.parseInt(answer);
+        } catch (NumberFormatException e) { // The answer could not be converted to integer
+            res = a - 1;
         }
         
         // While the user has not written an integer between a and b, re ask him an answer
@@ -156,15 +158,6 @@ public class menu {
 			displayStatistics();
 			break;
 			
-		/*
-		case  :
-			userHistory();
-			break;
-		case  :
-			userPurchases();
-			break;
-		*/
-			
 		// Quit
 		case -1 :
 		default :
@@ -173,7 +166,9 @@ public class menu {
  		}
  	}
  	private void initializeUser(String email, String password, int menuId) {
-		this.user = this.bdd.getUsers().connect(email, password);
+ 		
+		this.user = this.bdd.getUsers().connect(email, password); // Get user
+		
 		if(this.user == null) { // Could not find the user in data base
 			System.out.println(errors[0]);
 			this.menuId = 0;
@@ -183,7 +178,9 @@ public class menu {
 		}
  	}
  	private void initializeUserWithSentence(String email, String secretSentence, int menuId) {
-		this.user = this.bdd.getUsers().connectWithSentence(email, secretSentence);
+ 		
+		this.user = this.bdd.getUsers().connectWithSentence(email, secretSentence);// Get user
+		
 		if(this.user == null) { // Could not find the user in data base
 			System.out.println(errors[0]);
 			this.menuId = 0;
@@ -213,6 +210,7 @@ public class menu {
 	}
  	@SuppressWarnings("resource")
 	private void menuConnect() { // 1
+ 		
  		// Display choices
  		System.out.println("0 : " + toWrite[toWrite.length - 1][2]);
  		
@@ -244,8 +242,9 @@ public class menu {
 		} 
 	}
 	private void menuCreateAccount(boolean isAdmin) { // 2
+		
  		// Display choices
- 		System.out.println("0 : " + toWrite[toWrite.length - 1][2]);
+ 		System.out.println("0 : " + toWrite[toWrite.length - 1][2]); // Return to the previous menu
  		
 		// Create needed variables to get the user answer
 		@SuppressWarnings("resource")
@@ -254,7 +253,7 @@ public class menu {
         
  		// Ask the user his information to create an account
  		System.out.println(toWrite[2][0]);
-		for(int i = 0; i < toWrite[2].length - 1; i++) {
+		for(int i = 0; i < toWrite[2].length - 2; i++) {
 			System.out.println(toWrite[2][i + 1]);
 			
 			// Get user answer
@@ -268,14 +267,21 @@ public class menu {
 		}
 
 		// Create an account
-		this.bdd.getUsers().addUser(isAdmin, answer[3], answer[2], answer[0], answer[1], answer[4], answer[5]);
+		boolean addUser = this.bdd.getUsers().addUser(isAdmin, answer[3], answer[2], answer[0], answer[1], answer[4], answer[5]);
 		
-		// And connect if the user is not an administrator add an administrator account
+		// Display a message if the indicated email has already been used
+		if(!addUser) {
+	 		System.out.println(toWrite[2][toWrite[2].length - 1]);
+	 		return;
+		}
+		
+		// And connect if the user is not an administrator adding an administrator account
 		if(!isAdmin) {
 			initializeUser(answer[3], answer[2], 4);
 		}
 	}
 	private void menuForgottenPassword() { // 3
+		
  		// Display choices
  		System.out.println("0 : " + toWrite[toWrite.length - 1][2]);
  		
@@ -317,6 +323,7 @@ public class menu {
 		}
 	}
 	private void connected() { // 4 // 5
+		
  		// Display user choices
  		System.out.println("0 : " + toWrite[toWrite.length - 1][1]); // To disconnect
 		for(int i = 0; i < toWrite[4].length; i++) {
@@ -349,23 +356,19 @@ public class menu {
 		case 3 : // Explore the movie collection
 			this.menuId = 8;
 			break;
-		case 4 : // Explore history
-			System.out.println("This part has not been coded");
-			this.menuId = 0;
-			break;
-		case 5 : // See purchases
+		case 4 : // See purchases
 			this.menuId = 19;
 			break;
-		case 6 : // Display history Achat
+		case 5 : // Display history Achat
 			this.menuId = 18;
 			break;
-		case 7 : // Display statistics
+		case 6 : // Display statistics
 			this.menuId = 20;
 			break;
-		case 8 : // Add movie
+		case 7 : // Add movie
 			this.menuId = 17;
 			break;
-		case 9 : // Add administrator
+		case 8 : // Add administrator
 			menuCreateAccount(true);
 			break;
 		case 0 : // Disconnect
@@ -396,7 +399,8 @@ public class menu {
  		}
  		if(this.user.getIsAdmin()) {
 			System.out.println(toWrite[6][2] + " : Oui");
-		} 
+		}
+		System.out.println();
 		
  		// Display user choices
 		System.out.println(toWrite[6][3]);
@@ -453,7 +457,8 @@ public class menu {
  		}
  		if(this.user.getIsAdmin()) {
 			System.out.println(toWrite[6][2] + " : Oui");
-		} 
+		}
+		System.out.println();
 		
 		// Display user choices
  		System.out.println("0 : " + toWrite[toWrite.length - 1][2]); // To return to the connected menu
@@ -525,8 +530,7 @@ public class menu {
 		}
 		System.out.println(toWrite[8][0]); // Select a movie to get details about it
 		for(int i = 0; i < this.bdd.getMovies().getMovies().size() && i < nbMovieToDisplay; i++) {
-			// Title
-			System.out.println((i + more + 1) + " : " + movies.getMovies().get(i).getTitle());
+			System.out.println((i + more + 1) + " : " + movies.getMovies().get(i).getTitle()); // Display movie's title
 		}
 		
 		// Get user answer
@@ -559,32 +563,30 @@ public class menu {
 	private void displayMovieDetails() { // 9 // 10
 		
 		// Display movie informations
-		System.out.println(toWrite[9][0]);
-		System.out.println(this.movie.getTitle());
-		System.out.println(toWrite[9][1]);
-		System.out.println(this.movie.getTheme());
-		System.out.println(toWrite[9][2]);
+		System.out.println(toWrite[9][0] + " : " + this.movie.getTitle());
+		System.out.println(toWrite[9][1] + " : " + this.movie.getTheme());
+		System.out.print(toWrite[9][2] + " : ");
 		for(int i = 0; i < this.movie.getProducteurs().size(); i++) {
-			System.out.println(this.movie.getProducteurs().get(i));
+			System.out.print(this.movie.getProducteurs().get(i));
+			if(i != this.movie.getProducteurs().size() - 1) {
+				System.out.print(", ");
+			}
 		}
-		System.out.println(toWrite[9][3]);
+		System.out.println();
+		System.out.print(toWrite[9][3] + " : ");
 		for(int i = 0; i < this.movie.getActeursPrincipaux().size(); i++) {
-			System.out.println(this.movie.getActeursPrincipaux().get(i));
+			System.out.print(this.movie.getActeursPrincipaux().get(i));
+			if(i != this.movie.getActeursPrincipaux().size() - 1) {
+				System.out.print(", ");
+			}
 		}
-		System.out.println(toWrite[9][4]);
-		System.out.println(this.movie.getProductionDate());
-		System.out.println(toWrite[9][5]);
-		for(int i = 0; i < this.movie.getScores().size(); i++) {
-			System.out.println(this.movie.getScores().get(i));
-		}
-		System.out.println(toWrite[9][6]);
-		System.out.println(this.movie.getDescription());
-		System.out.println(toWrite[9][7]);
-		if(this.user.getIsSubscribe()){
-			System.out.println(this.movie.getPrice() * (80/100) + " euros"); // Show reduced price if the user is subscribed
-		} else {
-			System.out.println(this.movie.getPrice() + " euros");
-		}
+		System.out.println();
+		System.out.println(toWrite[9][4] + " : " + this.movie.getProductionDate());
+		System.out.println(toWrite[9][5] + " : " + this.movie.getNoteMoyenne());
+		System.out.println(toWrite[9][6] + " : " + this.movie.getDescription());
+		System.out.print(toWrite[9][7] + " : ");
+		System.out.println(this.movie.calculateReducedPrice(this.user) + " euros");
+		System.out.println();
 		
  		// Display user choices
  		System.out.println("0 : " + toWrite[toWrite.length - 1][2]); // To return to the previous menu
@@ -626,7 +628,7 @@ public class menu {
 			break;
 			
 		case 3 : // Buy movie
-			// this.user.addPurchase(movie);
+			this.user.addMovieToPanier(movie);
 			this.menuId = 9;
 			break;
 			
@@ -660,6 +662,7 @@ public class menu {
 		}
 	}
 	private void modifyMovie() { // 11
+		
  		// Display user choices
  		System.out.println("0 : " + toWrite[toWrite.length - 1][2]); // To return to the previous menu (displayMovieDetails)
  		System.out.println("1 : " + toWrite[toWrite.length - 1][3]); // To return to the connected menu
@@ -699,11 +702,12 @@ public class menu {
 			answer = getInputAsIntBetweenAandB(0, 1);
 
 			switch(answer) {
-			case 0 :
+			case 0 : // Add one producer
+				System.out.println(toWrite[11][toWrite[11].length - 2] + " :");
 				change = in.nextLine();
-				//this.movie.ad(change);
+				this.movie.getProducteurs();
 				break;
-			case 1 :
+			case 1 : // Delete all producers
 				this.movie.setProducteurs(null);
 				break;
 			default :
@@ -722,11 +726,12 @@ public class menu {
 			answer = getInputAsIntBetweenAandB(0, 1);
 
 			switch(answer) {
-			case 0 :
+			case 0 : // Add actor
+				System.out.println(toWrite[11][toWrite[11].length - 2] + " :");
 				change = in.nextLine();
-				// this.movie.addActeursPrincipaux(change);
+				this.movie.addActeursPrincipaux(change);
 				break;
-			case 1 :
+			case 1 : // Delete all actors
 				this.movie.setActeursPrincipaux(null);
 				break;
 			default :
@@ -842,11 +847,12 @@ public class menu {
 		}
 	}
 	private void searchMovie() { // 14
+		
  		// Display user choices
  		System.out.println("0 : " + toWrite[toWrite.length - 1][2]); // To return to the connected menu
 		System.out.println(toWrite[14][0]);
-		for(int i = 1; i < toWrite[14].length; i++) {
-			System.out.println((i + 1) + " : " + toWrite[14][i]);
+		for(int i = 1; i < toWrite[14].length - 1; i++) {
+			System.out.println((i) + " : " + toWrite[14][i]);
 		}
 		
 		// Get user answer
@@ -860,38 +866,45 @@ public class menu {
 		switch(answer) {
 			
 		case 1 : // Return to the connected menu
+			System.out.println(toWrite[14][toWrite[14].length - 1]);
 			search = in.nextLine();
 			foundedMovies = this.bdd.getMovies().searchMovieByTitle(search);
 			break;
 			
 		case 2 : // Return to the connected menu
+			System.out.println(toWrite[14][toWrite[14].length - 1]);
 			search = in.nextLine();
 			foundedMovies = this.bdd.getMovies().searchMovieByTheme(search);
 			break;
 			
 		case 3 : // Return to the connected menu
+			System.out.println(toWrite[14][toWrite[14].length - 1]);
 			search = in.nextLine();
 			foundedMovies = this.bdd.getMovies().searchMovieByProducer(search);
 			break;
 			
 		case 4 : // Return to the connected menu
+			System.out.println(toWrite[14][toWrite[14].length - 1]);
 			search = in.nextLine();
 			foundedMovies = this.bdd.getMovies().searchMovieByActor(search);
 			break;
 			
 		case 5 : // Return to the connected menu
+			System.out.println(toWrite[14][toWrite[14].length - 1]);
 			Date productionDate = new Date();
 			foundedMovies = this.bdd.getMovies().searchMovieByProductionDate(productionDate);
 			break;
 			
 		case 6 : // Return to the connected menu
+			System.out.println(toWrite[14][toWrite[14].length - 1]);
 			long value = Long.parseLong(in.nextLine());
 			foundedMovies = this.bdd.getMovies().searchMovieByScore(value);
 			break;
 			
 		case 7 : // Return to the connected menu
+			System.out.println(toWrite[14][toWrite[14].length - 1]);
 			double price = Double.parseDouble(in.nextLine());
-			foundedMovies = this.bdd.getMovies().searchMovieByPrice(price);
+			foundedMovies = this.bdd.getMovies().searchMovieByPrice(price, this.user);
 			break;
 
 		case 0 : // Return to the connected menu
@@ -899,9 +912,9 @@ public class menu {
 			this.menuId = 5;
 			return;
 		}
-		
-		displayMovieCollection(new Movies(foundedMovies));
+
 		this.menuId = 8;
+		displayMovieCollection(new Movies(foundedMovies));
 	}
 	private void giveScore() { // 15
 		
@@ -909,14 +922,13 @@ public class menu {
 		int answer;
 		
 		// Check if the user has already gave a score to this movie
-
 		for(int i = 0; i < this.user.getScores().size(); i++) {
 			if(this.user.getScores().get(i).getMovie().getCode() == this.movie.getCode()) { 
 				
 				// Display user choices
-				System.out.println(toWrite[15][0] + this.user.getScores().get(i).getValue());
+				System.out.println(toWrite[15][0] + " : " + this.user.getScores().get(i).getValue());
 				for(int j = 1; j < toWrite[15].length - 1; j++) {
-					System.out.println((j + " : " + toWrite[15][j]));
+					System.out.println(j + " : " + toWrite[15][j]);
 				}
 				
 				// Get user answer
@@ -925,19 +937,17 @@ public class menu {
 				// Change menu depending on the user answer
 				switch(answer) {
 					
-				case 1 : // Do not change the score
+				case 2 : // Do not change the score
 					change = false;
 					break;
 					
 				default : // Change the score
 					break;
 				}
-					
+
 				break; // Stop searching if user already gave a score to this movie (because you found it)
 			}
 		}
-		
-		this.menuId = 9; // In every case, return to the previous menu at the end of choice
 		
 		// The user changed his mind and do not want to change score
 		if(!change) {
@@ -953,88 +963,51 @@ public class menu {
 		
 		// Change score depending on the user answer
 		switch(answer) {
-			
+		
 		case 0 : // Return to the previous menu
 			break;
 			
 		default : // Change the score
-			this.bdd.addScore(this.user.getCode(), this.movie.getCode(), Long.valueOf(getInputAsIntBetweenAandB(0, 10)));
+			this.bdd.addScore(this.user.getCode(), this.movie.getCode(), Long.valueOf(answer));
 			break;
-		}
-	}
-	private void giveComment() { // 16
-		
-		boolean change = true;
-		int answer;
-		
-		// Check if the user has already commented a score to this movie
-		for(int i = 0; i < this.user.getComment().size(); i++) {
-			if(this.user.getComment().get(i).getMovie().getCode() == this.movie.getCode()) { 
-				
-				// Display user choices
-				System.out.println(toWrite[16][0] + this.user.getComment().get(i).getText());
-				for(int j = 1; j < toWrite[16].length - 1; j++) {
-					System.out.println((j + " : " + toWrite[15][j]));
-				}
-				
-				// Get user answer
-				answer = getInputAsIntBetweenAandB(0, 1);
-				
-				// Change menu depending on the user answer
-				switch(answer) {
-					
-				case 1 : // Do not change the score
-					change = false;
-					break;
-					
-				default : // Change the comment
-					break;
-				}
-					
-				break; // Stop searching if user already gave a comment to this movie (because you found it)
-			}
 		}
 		
 		this.menuId = 9; // In every case, return to the previous menu at the end of choice
-		
-		// The user changed his mind and do not want to change comment
-		if(!change) {
-			return;
-		}
+	}
+	private void giveComment() { // 16
 		
 		// Display user choices
  		System.out.println("0 : " + toWrite[toWrite.length - 1][2]); // To return to the previous menu
-		System.out.println("1 : " + toWrite[16][toWrite[16].length - 1]); // Write comment
+		System.out.println(toWrite[16][toWrite[16].length - 1]); // Write comment
 		
 		// Get user answer
-		answer = getInputAsIntBetweenAandB(0, 10);
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
+		String answer = in.nextLine();
 		
-		// Change score depending on the user answer
+		// Change comment depending on the user answer
 		switch(answer) {
-			
-		case 1 : // Change the comment
-	        System.out.println(toWrite[16][toWrite[16].length - 1]);
-			
-			// Get new comment
-			@SuppressWarnings("resource")
-			Scanner in = new Scanner(System.in);
-	        String comment = in.nextLine();
-	        
-			this.bdd.addComment(this.user.getCode(), this.movie.getCode(), comment);
-			
+		
+		case "0" : // Return to the previous menu
 			break;
 			
-		default : // Return to the previous menu
+		default : // Change the comment
+			this.bdd.addComment(this.user.getCode(), this.movie.getCode(), answer);
 			break;
 		}
+		
+		this.menuId = 12; // In every case, return to the previous menu at the end of choice
 	}	
+	@SuppressWarnings("deprecation")
 	private void addMovie() { // 17
 		
+		// Necessary variables
 		boolean validated = false;
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		int answer = 0;
-		
+
+		// Movie Fields
 		String title = "";
 		String theme = "";
 		Date productionDate = new Date();
@@ -1088,6 +1061,7 @@ public class menu {
 				this.menuId = 4;
 				break;
 
+			// Get Movie content
 			case 2 :
 				title = in.nextLine();
 				System.out.println(title);
@@ -1098,7 +1072,7 @@ public class menu {
 				break;
 
 			case 4 :
-				// productionDate =
+				productionDate = new Date(in.nextLine());
 				break;
 
 			case 5 :
@@ -1119,23 +1093,21 @@ public class menu {
 			}
 		}
 	}
-	private void displayHistoriqueAchats() { //18
+	private void displayHistoriqueAchats() { // 18
 		
+		// Check if user has historiqueAchats
 		if(this.user.getHistoriqueAchats().size() == 0) {
 			System.out.println(toWrite[18][toWrite[18].length - 1]);
 		}
 		
 		for (int i = 0; i < this.user.getHistoriqueAchats().size(); i++) { // For each Purchase of the user
 			// Display purchase informations
-			System.out.println(toWrite[18][0] + " : " + i);
-			System.out.println(toWrite[18][1] + " : " + this.user.getHistoriqueAchats().get(i).getDateAchat());
-			System.out.println(toWrite[18][2] + " : " + this.user.getHistoriqueAchats().get(i).getMontant());
-			System.out.println();
+			System.out.println(this.user.getHistoriqueAchats().get(i).genererFacture());
 		}
 		
 		this.menuId = 4;
 	}
-	private void displayPanier() { //19
+	private void displayPanier() { // 19
 		
 		// Display a message and quit the menu if the user has nothing on his panier
 		if(this.user.getPanier().size() == 0) {
@@ -1178,11 +1150,13 @@ public class menu {
 		case 0 : // returns to the previous menu
 			this.menuId = 4;
 			break;
+			
 		case 1 : // Pay
 			this.bdd.addPurchase(this.user.getCode(), price);
 			this.user.setPanier(new ArrayList<>());
 			this.menuId = 4;
 			break;
+			
 		case 2 : // Delete element from panier
 			
 			answer = chooseMovieInPanier(); // Select the movie
@@ -1198,6 +1172,7 @@ public class menu {
 				break;
 			}
 			break;
+			
 		case 3 : // Display movie details
 			
 			answer = chooseMovieInPanier(); // Select the movie
@@ -1227,7 +1202,7 @@ public class menu {
 		
 		return answer;
 	}
- 	private void displayStatistics() { //20
+ 	private void displayStatistics() { // 20
  		
 		// Display Statistics
 		System.out.println(toWrite[20][0] + this.bdd.getUsers().getNbAccount() + toWrite[20][1]);
