@@ -1125,13 +1125,8 @@ public class menu {
 			System.out.print(this.user.getPanier().get(i).getTitle());
 			
 			// Calculate and display price
-			if(this.user.getIsSubscribe()) { // Reduced price if the user is subscribed
-				price += (80/100) * this.user.getPanier().get(i).getPrice();
-				System.out.print(" - " + this.user.getPanier().get(i).getPrice() + " euros");
-			} else {
-				price += this.user.getPanier().get(i).getPrice();
-				System.out.print(" - " + this.user.getPanier().get(i).getPrice() + " euros");
-			}
+			price += this.user.getPanier().get(i).getPrice();
+			System.out.print(" - " + this.user.getPanier().get(i).getPrice() + " euros");
 			System.out.println();
 		}
 		System.out.println(toWrite[19][0] + " : " + price + " euros"); // Display price
@@ -1152,7 +1147,7 @@ public class menu {
 			break;
 			
 		case 1 : // Pay
-			this.bdd.addPurchase(this.user.getCode(), price);
+			this.bdd.addPurchase(this.user.getCode());
 			this.user.setPanier(new ArrayList<>());
 			this.menuId = 4;
 			break;
