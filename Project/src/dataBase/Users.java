@@ -197,7 +197,7 @@ public class Users {
 		}
 		return 0;
 	}
-	void readSavedUsers() {
+	public void readSavedUsers() {
 		
 		File bddUSersDirectory = new File("Bdd/Users");
 		

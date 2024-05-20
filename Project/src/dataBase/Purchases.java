@@ -22,8 +22,7 @@ public class Purchases {
 			"Code :",
 		    "User code :",
 			"Buying Date :",
-		    "Amont :",
-			"Movies code :"
+		    "Amont :"
 	};
 	
 	// Initialize

@@ -64,6 +64,13 @@ public class Purchase {
         }
         return montantTotal;
     }
+    static public double calculerMontantPanier(List<Movie> movies, User user) {
+        double montantTotal = 0;
+        for (Movie movie : movies) {
+            montantTotal += movie.getPrice();
+        }
+        return montantTotal;
+    }
 
 	// Methods
     public String genererFacture() {

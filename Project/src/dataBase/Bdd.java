@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import metier.Purchase;
+
 public class Bdd {
 
 	// Fields
@@ -22,49 +24,86 @@ public class Bdd {
 		this.purchases = new Purchases() ;
 		this.scores = new Scores() ;
 		
-		test();
+		testBdd();
 		readSavedBdd();
-		//testSavedBdd();
+		testDisplayBdd();
+	}
+	public void close() {
+		saveBdd();
+		testDisplayBdd();
+		//deleteBddFile(new File("Bdd"));
 	}
 	
 	// Publics functions
 	@SuppressWarnings("deprecation")
-	public void test() {
-		// Users
-		this.users.addUser(true, "email", "mdp", "nom", "prenom", "adresse", "mot");
-		this.users.addUser(true, "emailA", "mdpA", "nomA", "prenomA", "adresseA", "motA");
-		// Purchase
-		this.addPurchase(1, 12);
-		this.addPurchase(1, 4);
-		// Movies
-		Date date = new Date(2003, 03, 05);
-		List<String> acteursPrincipaux = new ArrayList<>();
-		acteursPrincipaux.add("acteurA");
-		acteursPrincipaux.add("ActeurB");
-		List<String> producteurs = new ArrayList<>();
-		producteurs.add("producteurA");
-		producteurs.add("producteurB");
-		this.movies.addMovie("titre", "theme", date, "description", acteursPrincipaux, producteurs, 2);
+	public void testBdd() {
+		
+		// Some users
+		this.users.addUser(true, "labordecam@cy-tech.fr", "123", "Laborde", "Camille", "rue de parc à Cergy", "merci");
+		this.users.addUser(false, "brasafranklin@cy-tech.fr", "000", "Brasa", "Franklin", "rue de parc à Cergy", "hey");
+		this.users.addUser(false, "destyedner@cy-tech.fr", "987", "Desty", "Edner", "rue de parc à Cergy", "voilà");
+		
+		// Some movies
+		Date productionDate = new Date();
+		productionDate.setYear(2003);
+		List<String> actors = new ArrayList<>();
+		actors.add("Pat Welsh");
+		actors.add("Henry Thomas");
+		List<String> productors = new ArrayList<>();
+		productors.add("Steven Spielberg");
+		this.movies.addMovie("E.T., l'extra-terrestre",
+				"Science-fiction",
+				productionDate,
+				"Le film raconte l'histoire d'Elliott, un petit garçon solitaire qui se lie d'amitié avec un extraterrestre abandonné sur Terre. Avec son frère et sa sœur, Elliott va le recueillir puis l'aider à reprendre contact avec ses congénères, tout en essayant de le garder caché de leur mère et du gouvernement américain.",
+				actors,
+				productors,
+				2);
+		actors = new ArrayList<>();
+		actors.add("Amanda Seyfried");
+		actors.add("Colin Farrell");
+		actors.add("Josh Hutcherson");
+		productors = new ArrayList<>();
+		productors.add("Chris Wedge");
+		this.movies.addMovie("Epic : La Bataille du royaume secret",
+				"Animation",
+				productionDate,
+				"C'est l'histoire d'une adolescente qui se retrouve dans un royaume secret où elle aide des personnages amusants et fantaisistes à sauver leur monde, ce qui permet de sauver la forêt.",
+				actors,
+				productors,
+				4);
+		actors = new ArrayList<>();
+		actors.add("Eric Bana");
+		actors.add("Jennifer Connelly");
+		actors.add("Sam Elliott");
+		productors = new ArrayList<>();
+		productors.add("Ang Lee");
+		this.movies.addMovie("Hulk ",
+				"Action",
+				productionDate,
+				"C'est l'histoire d'une adolescente qui se retrouve dans un royaume secret où elle aide des personnages amusants et fantaisistes à sauver leur monde, ce qui permet de sauver la forêt.",
+				actors,
+				productors,
+				3);
+		
+		// Some comments
+		this.addComment(1, 1, "J'ai adoré ce film !");
+		this.addComment(2, 2, "C'est très sympa en famille");
+		this.addComment(2, 3, "C'est mon préféré");
 
-		date = new Date(2001, 12, 05);
-		acteursPrincipaux = new ArrayList<>();
-		acteursPrincipaux.add("acteurA2");
-		acteursPrincipaux.add("ActeurB2");
-		producteurs = new ArrayList<>();
-		producteurs.add("producteurA2");
-		producteurs.add("producteurB2");
-		this.movies.addMovie("titre2", "theme2", date, "description2", acteursPrincipaux, producteurs, 3);
-		// Comment
-		this.comments.addComment("text du commentaire", this.getMovies().getMovie(1), this.getUsers().getUser(1));
-		//this.comments.getComment(1).setActivated(false);
-		this.movies.getMovie(1).addComment(this.comments.getComment(1));
+		// Some scores
+		this.addScore(1, 1, (long)9);
+		this.addScore(2, 2, (long)6);
+		this.addScore(2, 3, (long)8);
+
+		// Some purchases
 		this.users.getUser(1).addMovieToPanier(this.movies.getMovie(1));
-		this.users.getUser(1).addMovieToPanier(this.movies.getMovie(2));
-		// Score
-		//this.scores.addScore(new Score(1, 4, null, this.movies.getMovie(1), this.users.getUser(1)));
+		this.addPurchase(1);
+		this.users.getUser(2).addMovieToPanier(this.movies.getMovie(2));
+		this.users.getUser(2).addMovieToPanier(this.movies.getMovie(3));
+		this.addPurchase(2);
 	}
 	@SuppressWarnings("deprecation")
-	public void testSavedBdd() {
+	public void testDisplayBdd() {
 		// User
 		for (int i = 0; i < this.getUsers().getUsers().size(); i++) {
 			System.out.println("User numéro = " + this.getUsers().getUsers().get(i).getCode());
@@ -124,11 +163,6 @@ public class Bdd {
 			System.out.println("User numéro = " + this.scores.getScores().get(i).getUser().getCode());
 			System.out.println();
 		}
-	}
-	public void close() {
-		saveBdd();
-		testSavedBdd();
-		deleteBddFile(new File("Bdd"));
 	}
 	public void saveBdd() {
 		deleteBddFile(new File("Bdd")); // Delete old bdd
@@ -218,9 +252,10 @@ public class Bdd {
 		this.movies.getMovie(movieId).addScore(this.scores.getScore(scoreId)); // Add the score object to the movie object
 		this.users.getUser(userId).addScore(this.scores.getScore(scoreId)); // Add the score object to the user object
 	}
-	public void addPurchase(int userId, long montant) {
+	public void addPurchase(int userId) {
 		int purchaseId = this.purchases.getPurchases().size() + 1; // Get Purchase id
-		this.purchases.addPurchase(this.users.getUser(userId), montant, this.users.getUser(userId).getPanier());
+		
+		this.purchases.addPurchase(this.users.getUser(userId), Purchase.calculerMontantPanier(this.users.getUser(userId).getPanier(), this.users.getUser(userId)), this.users.getUser(userId).getPanier());
 		this.users.getUser(userId).addPurchaseToHistorique(this.purchases.getPurchase(purchaseId));
 	}
 }
