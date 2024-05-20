@@ -22,7 +22,8 @@ public class Purchases {
 			"Code :",
 		    "User code :",
 			"Buying Date :",
-		    "Amont :"
+		    "Amont :",
+		    "List des films :"
 	};
 	
 	// Initialize
@@ -58,9 +59,8 @@ public class Purchases {
 			    writer.write(purchases.get(i).getMontant() + "\n");
 			    writer.write(purchaseFields[4] + "\n");
 			    for(int j = 0; j < this.purchases.get(i).getPanier().size(); j++) {
-				    writer.write(this.purchases.get(i).getPanier().get(j) + "\n");
+				    writer.write(this.purchases.get(i).getPanier().get(j).getCode() + "\n");
 			    }
-			    writer.write(purchases.get(i).getMontant() + "\n");
 			    
 			    writer.close();
 			}
@@ -70,7 +70,8 @@ public class Purchases {
 	    }	
 	}
 	public void readSavedPurchases(Users users, Movies movies) {
-		
+
+		this.purchases = new ArrayList<Purchase>(); // Re initialize
 		File bddMoviesDirectory = new File("Bdd/Purchases");
 		
 		// Check if there is saved data, if not : stop the function (there is no data to read)

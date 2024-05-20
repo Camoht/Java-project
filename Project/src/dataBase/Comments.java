@@ -134,7 +134,8 @@ public class Comments {
 			    			texte = lineInFile.trim();
 			    			break;
 			    		case 2 :
-			    			publicationDate = new Date(lineInFile.trim());
+			    			publicationDate = new Date();
+			    			//publicationDate = new Date(temp);
 			    			break;
 			    		case 3 :
 			    			activated = lineInFile.trim().equals("true");

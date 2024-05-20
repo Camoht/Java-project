@@ -59,7 +59,7 @@ public class Scores {
 			for (int i = 0; i < this.scores.size(); i++) {
 			    
 				// In the file
-			    writer = new BufferedWriter(new FileWriter("Bdd/Purchases/" +  scores.get(i).getCode() + ".txt"));
+			    writer = new BufferedWriter(new FileWriter("Bdd/Scores/" +  scores.get(i).getCode() + ".txt"));
 			    
 			    // Write data
 			    writer.write(scoreFields[0] + "\n");
@@ -81,7 +81,8 @@ public class Scores {
 	    }	
 	}
 	public void readSavedScores(Users users, Movies movies) {
-		
+
+		this.scores = new ArrayList<Score>(); // Re initialize
 		File bddMoviesDirectory = new File("Bdd/Scores");
 		
 		// Check if there is saved data, if not : stop the function (there is no data to read)
@@ -131,7 +132,8 @@ public class Scores {
 			    			value = Long.parseLong(lineInFile.trim());
 			    			break;
 			    		case 2 :
-			    			publicationDate = new Date(Long.parseLong(lineInFile.trim()));
+			    			publicationDate = new Date();
+			    			// publicationDate = new Date(Long.parseLong(lineInFile.trim()));
 			    			break;
 			    		case 3 :
 			    			movieCode = Integer.parseInt(lineInFile.trim());

@@ -1,5 +1,6 @@
 package metier;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class Purchase {
         this.user = user;
         this.dateAchat = dateAchat;
         this.montant = montant;
-        this.panier = panier;
+        this.panier = panier != null ? panier : new ArrayList<>();
     }
 
     // Getters

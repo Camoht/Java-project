@@ -243,7 +243,7 @@ public class Users {
 			    	}
 			    	
 			    	// Get the value of the current field
-			    	if(! isTitle) { // The line is a field content
+			    	if(!isTitle) { // The line is a field content
 			    		switch(idField) {
 			    		case 0 :
 			    			code = Integer.parseInt(lineInFile.trim());
@@ -273,13 +273,12 @@ public class Users {
 			    			subscriber = lineInFile.trim().equals("true");
 			    			break;
 				    	}
-	
-				    	lineInFile = reader.readLine(); // Read the next line of the current file
 				    }
+			    	lineInFile = reader.readLine(); // Read the next line of the current file
 
-				    User user = new User(subscriber, code, null, isAdmin, null, null, email, password, surname, name, adresse, secretSentence);
-				    addUser(user);
 				}
+			    User user = new User(subscriber, code, null, isAdmin, null, null, email, password, surname, name, adresse, secretSentence);
+			    addUser(user);
 			    
 			} catch (IOException e) { // Display a message if an error has occurred while reading in the files
 		        System.out.println("An error occurred : We could not get saved informations");

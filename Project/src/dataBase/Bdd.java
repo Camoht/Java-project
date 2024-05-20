@@ -26,11 +26,12 @@ public class Bdd {
 		
 		testBdd();
 		readSavedBdd();
-		testDisplayBdd();
+		//testDisplayBdd();
 	}
 	public void close() {
 		saveBdd();
-		testDisplayBdd();
+		//testDisplayBdd();
+		//readSavedBdd();
 		//deleteBddFile(new File("Bdd"));
 	}
 	
@@ -115,7 +116,9 @@ public class Bdd {
 			System.out.println("Mot secret = " + this.getUsers().getUsers().get(i).getPhraseSecrete());
 			System.out.println("Est Admin = " + this.getUsers().getUsers().get(i).getIsAdmin());
 			System.out.print("Purchases numéro = ");
+			System.out.println(this.getUsers().getUsers().get(i).getHistoriqueAchats().size());
 			for(int j = 0; j < this.getUsers().getUsers().get(i).getHistoriqueAchats().size(); j++) {
+				System.out.println("j = " + j);
 				System.out.print(this.getUsers().getUsers().get(i).getHistoriqueAchats().get(j).getCode());
 				if(j != this.getUsers().getUsers().get(i).getHistoriqueAchats().size() - 1) {
 					System.out.print(", ");
@@ -188,15 +191,15 @@ public class Bdd {
 		
 		// Connect objects between them
 		for(int i = 0; i < purchases.getPurchases().size(); i++) { // Connect Purchases
-			this.users.getUser(this.purchases.getPurchase(i).getUser().getCode()).addPurchaseToHistorique(this.purchases.getPurchase(i)); // Add Purchase to User
+			this.users.getUser(this.purchases.getPurchase(i + 1).getUser().getCode()).addPurchaseToHistorique(this.purchases.getPurchase(i)); // Add Purchase to User
 		}
 		for(int i = 0; i < scores.getScores().size(); i++) { // Connect Scores
-			this.users.getUser(this.scores.getScore(i).getUser().getCode()).addScore(this.scores.getScore(i)); // Add Score to User
-			this.movies.getMovie(this.scores.getScore(i).getMovie().getCode()).addScore(this.scores.getScore(i)); // Add Score to Movie
+			this.users.getUser(this.scores.getScore(i + 1).getUser().getCode()).addScore(this.scores.getScore(i)); // Add Score to User
+			this.movies.getMovie(this.scores.getScore(i + 1).getMovie().getCode()).addScore(this.scores.getScore(i)); // Add Score to Movie
 		}
 		for(int i = 0; i < scores.getScores().size(); i++) { // Connect Comment
-			this.users.getUser(this.comments.getComment(i).getAuthor().getCode()).addComment(this.comments.getComment(i)); // Add Comment to User
-			this.movies.getMovie(this.comments.getComment(i).getMovie().getCode()).addComment(this.comments.getComment(i)); // Add Comment to Movie
+			this.users.getUser(this.comments.getComment(i + 1).getAuthor().getCode()).addComment(this.comments.getComment(i)); // Add Comment to User
+			this.movies.getMovie(this.comments.getComment(i + 1).getMovie().getCode()).addComment(this.comments.getComment(i)); // Add Comment to Movie
 		}
 	}
 	boolean deleteBddFile(File directoryToBeDeleted) { // Delete Bdd files
